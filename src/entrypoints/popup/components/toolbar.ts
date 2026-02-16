@@ -22,7 +22,7 @@ export function createToolbar(callbacks: ToolbarCallbacks): HTMLElement {
   const formats: Array<{ label: string; format: ExportFormat }> = [
     { label: 'JSON', format: 'json' },
     { label: 'Netscape cookies.txt', format: 'netscape' },
-    { label: 'Anti-Detect JSON', format: 'antidetect' },
+    { label: 'Profile JSON', format: 'antidetect' },
     { label: 'Header String', format: 'header' },
   ];
 

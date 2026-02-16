@@ -3,7 +3,7 @@
     "message": "CookiePeek"
   },
   "EXTENSION_DESCRIPTION": {
-    "message": "Быстрый менеджер cookie для разработчиков и QA. Полный контроль над cookie сайта — без телеметрии и сбора данных."
+    "message": "Менеджер cookie: просмотр, поиск, decode (JWT/Base64/URL), правка, экспорт/импорт. Без телеметрии."
   },
   "POPUP_TITLE": {
     "message": "CookiePeek"
@@ -18,7 +18,7 @@
     "message": "Экспорт в cookies.txt"
   },
   "EXPORT_ANTIDETECT": {
-    "message": "Экспорт Anti-Detect JSON"
+    "message": "Экспорт Profile JSON"
   },
   "EXPORT_HEADER": {
     "message": "Экспорт как Header String"

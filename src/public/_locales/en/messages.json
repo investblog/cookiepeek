@@ -3,7 +3,7 @@
     "message": "CookiePeek"
   },
   "EXTENSION_DESCRIPTION": {
-    "message": "Fast, privacy-first cookie manager for developers, QA, and anyone who needs full control over site cookies."
+    "message": "Privacy-first cookie manager: view, search, decode (JWT/Base64/URL), edit, export/import — zero telemetry."
   },
   "POPUP_TITLE": {
     "message": "CookiePeek"
@@ -18,7 +18,7 @@
     "message": "Export as cookies.txt"
   },
   "EXPORT_ANTIDETECT": {
-    "message": "Export Anti-Detect JSON"
+    "message": "Export Profile JSON"
   },
   "EXPORT_HEADER": {
     "message": "Export as Header String"

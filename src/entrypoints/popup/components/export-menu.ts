@@ -8,7 +8,7 @@ export function detectExportFilename(format: ExportFormat, domain: string): stri
     case 'netscape':
       return `${clean}_cookies.txt`;
     case 'antidetect':
-      return `${clean}_antidetect.json`;
+      return `${clean}_profile.json`;
     case 'header':
       return `${clean}_header.txt`;
   }
