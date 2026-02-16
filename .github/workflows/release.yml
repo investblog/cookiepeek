@@ -49,4 +49,6 @@ jobs:
           files: |
             dist/*-chrome.zip
             dist/*-firefox.zip
+            dist/*-edge.zip
+            dist/*-opera.zip
             dist/*-sources.zip
