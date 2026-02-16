@@ -23,10 +23,7 @@ export default defineConfig({
     homepage_url: 'https://cookiepeek.com',
     default_locale: 'en',
 
-    ...(browser === 'chrome' && { minimum_chrome_version: '116' }),
-
     permissions: ['cookies', 'activeTab', 'storage'],
-
     host_permissions: ['<all_urls>'],
 
     icons: {
@@ -35,6 +32,20 @@ export default defineConfig({
       48: 'icons/48.png',
       128: 'icons/128.png',
     },
+
+    // ---- Browser-specific ----
+
+    ...(browser === 'chrome' && {
+      minimum_chrome_version: '116',
+    }),
+
+    ...(browser === 'edge' && {
+      minimum_chrome_version: '116',
+    }),
+
+    ...(browser === 'opera' && {
+      minimum_chrome_version: '116',
+    }),
 
     ...(browser === 'firefox' && {
       browser_specific_settings: {
