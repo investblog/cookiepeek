@@ -325,6 +325,10 @@ a.popup__title:hover {
   border-radius: var(--radius-xs);
 }
 
+.btn svg {
+  flex-shrink: 0;
+}
+
 /* ---- Dropdown / Export Menu ---- */
 
 .dropdown {
@@ -712,6 +716,35 @@ a.popup__title:hover {
 
 .import-dialog__textarea:focus {
   border-color: var(--input-border-focus);
+}
+
+/* ---- File upload ---- */
+
+.file-upload {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.file-upload__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.file-upload__name {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 180px;
 }
 
 /* ---- Empty state ---- */

@@ -10,7 +10,7 @@ import { showImportDialog } from './components/import-dialog';
 import { createSearch, filterCookies } from './components/search';
 import { cookieKey, createTable, sortCookies } from './components/table';
 import { createBulkBar, createToolbar } from './components/toolbar';
-import { copyToClipboard, downloadFile, el, ICONS, showToast, svg301Logo, svgIcon } from './helpers';
+import { copyToClipboard, downloadFile, el, ICONS, showToast, svg301Logo, svgBrandIcon, svgIcon } from './helpers';
 
 // ---- State ----
 let allCookies: CookieRecord[] = [];
@@ -39,7 +39,7 @@ function buildUI(): void {
   titleLink.target = '_blank';
   titleLink.rel = 'noopener';
   titleLink.className = 'popup__title';
-  titleLink.appendChild(svgIcon(ICONS.cookie, 18, true));
+  titleLink.appendChild(svgBrandIcon(18));
   titleLink.appendChild(document.createTextNode('CookiePeek'));
   header.appendChild(titleLink);
 
@@ -84,6 +84,7 @@ function buildUI(): void {
     () => {
       decodedPanel?.classList.remove('open');
       currentDecodedCookie = null;
+      updatePopupHeight();
     },
     (mode: DecodeMode) => {
       if (currentDecodedCookie) onForceDecodeMode(currentDecodedCookie, mode);
@@ -120,6 +121,7 @@ function buildUI(): void {
     if (e.key === 'Escape') {
       decodedPanel?.classList.remove('open');
       currentDecodedCookie = null;
+      updatePopupHeight();
     }
   });
 }
@@ -130,7 +132,15 @@ const POPUP_CHROME_HEIGHT = 108; // header + toolbar + footer + table header
 const POPUP_MIN_HEIGHT = 200;
 const POPUP_MAX_HEIGHT = 600;
 
+function hasOpenOverlay(): boolean {
+  return !!document.querySelector('.drawer') || !!decodedPanel?.classList.contains('open');
+}
+
 function updatePopupHeight(): void {
+  if (hasOpenOverlay()) {
+    document.body.style.height = `${POPUP_MAX_HEIGHT}px`;
+    return;
+  }
   const rows = filteredCookies.length || 3; // at least 3 rows worth for empty state
   const ideal = POPUP_CHROME_HEIGHT + rows * POPUP_ROW_HEIGHT;
   const height = Math.min(Math.max(ideal, POPUP_MIN_HEIGHT), POPUP_MAX_HEIGHT);
@@ -270,6 +280,7 @@ function onSelectAll(checked: boolean): void {
 async function onClickValue(cookie: CookieRecord): Promise<void> {
   currentDecodedCookie = cookie;
   decodedPanel?.classList.add('open');
+  updatePopupHeight();
 
   const response = await sendMessageSafe<DecodedValue>({
     type: 'cookiepeek:decode-value',
@@ -307,9 +318,10 @@ async function onEdit(cookie: CookieRecord): Promise<void> {
         showToast(response?.error || 'Failed to save cookie', 'error');
       }
     },
-    () => {},
+    () => updatePopupHeight(),
   );
   document.body.appendChild(modal);
+  updatePopupHeight();
 }
 
 async function onDelete(cookie: CookieRecord): Promise<void> {
@@ -347,9 +359,10 @@ function onAddCookie(): void {
         showToast(response?.error || 'Failed to add cookie', 'error');
       }
     },
-    () => {},
+    () => updatePopupHeight(),
   );
   document.body.appendChild(modal);
+  updatePopupHeight();
 }
 
 async function onExport(format: ExportFormat): Promise<void> {
@@ -403,9 +416,10 @@ function onImport(): void {
         showToast('Import failed', 'error');
       }
     },
-    () => {},
+    () => updatePopupHeight(),
   );
   document.body.appendChild(modal);
+  updatePopupHeight();
 }
 
 async function onBulkDelete(): Promise<void> {

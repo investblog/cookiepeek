@@ -50,15 +50,21 @@ export function showImportDialog(
   textarea.rows = 8;
   body.appendChild(textarea);
 
-  // File upload
-  const fileWrap = el('div', 'drawer__field');
-  fileWrap.style.marginTop = 'var(--space-2)';
-  const fileLabel = el('label', 'drawer__label', 'Or upload a file:');
+  // File upload — hidden input + styled button
+  const fileWrap = el('div', 'file-upload');
   const fileInput = document.createElement('input');
   fileInput.type = 'file';
   fileInput.accept = '.json,.txt';
+  fileInput.className = 'file-upload__input';
+  const fileBtn = el('button', 'btn btn--secondary btn--sm');
+  fileBtn.type = 'button';
+  fileBtn.appendChild(svgIcon(ICONS.fileUpload, 14, true));
+  fileBtn.appendChild(document.createTextNode('Choose file'));
+  fileBtn.addEventListener('click', () => fileInput.click());
+  const fileName = el('span', 'file-upload__name', 'No file chosen');
   fileInput.addEventListener('change', async () => {
     if (fileInput.files?.[0]) {
+      fileName.textContent = fileInput.files[0].name;
       const text = await readFileAsText(fileInput.files[0]);
       textarea.value = text;
       // Auto-detect format
@@ -74,8 +80,9 @@ export function showImportDialog(
       }
     }
   });
-  fileWrap.appendChild(fileLabel);
   fileWrap.appendChild(fileInput);
+  fileWrap.appendChild(fileBtn);
+  fileWrap.appendChild(fileName);
   body.appendChild(fileWrap);
 
   panel.appendChild(body);

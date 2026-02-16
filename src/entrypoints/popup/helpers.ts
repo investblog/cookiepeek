@@ -90,9 +90,66 @@ export const ICONS = {
   x: 'M18 6L6 18M6 6l12 12',
   chevronDown: 'M6 9l6 6 6-6',
   refresh: 'M23 4v6h-6M1 20v-6h6M20.49 9A9 9 0 0 0 5.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 0 1 3.51 15',
-  cookie:
-    'M12,3A9,9 0 0,0 3,12A9,9 0 0,0 12,21A9,9 0 0,0 21,12C21,11.5 20.96,11 20.87,10.5C20.6,10 20,10 20,10H18V9C18,8 17,8 17,8H15V7C15,6 14,6 14,6H13V4C13,3 12,3 12,3M9.5,6A1.5,1.5 0 0,1 11,7.5A1.5,1.5 0 0,1 9.5,9A1.5,1.5 0 0,1 8,7.5A1.5,1.5 0 0,1 9.5,6M6.5,10A1.5,1.5 0 0,1 8,11.5A1.5,1.5 0 0,1 6.5,13A1.5,1.5 0 0,1 5,11.5A1.5,1.5 0 0,1 6.5,10M11.5,11A1.5,1.5 0 0,1 13,12.5A1.5,1.5 0 0,1 11.5,14A1.5,1.5 0 0,1 10,12.5A1.5,1.5 0 0,1 11.5,11M16.5,13A1.5,1.5 0 0,1 18,14.5A1.5,1.5 0 0,1 16.5,16A1.5,1.5 0 0,1 15,14.5A1.5,1.5 0 0,1 16.5,13M11,16A1.5,1.5 0 0,1 12.5,17.5A1.5,1.5 0 0,1 11,19A1.5,1.5 0 0,1 9.5,17.5A1.5,1.5 0 0,1 11,16Z',
+  fileUpload:
+    'M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M13.5,16V19H10.5V16H8L12,12L16,16H13.5M13,9V3.5L18.5,9H13Z',
 };
+
+/** CookiePeek brand icon — bracket cookie (concept D, transparent) */
+export function svgBrandIcon(size = 18): SVGSVGElement {
+  const ns = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('width', String(size));
+  svg.setAttribute('height', String(size));
+  svg.setAttribute('viewBox', '0 0 128 128');
+  svg.setAttribute('fill', 'none');
+
+  // Left bracket
+  const lb = document.createElementNS(ns, 'path');
+  lb.setAttribute(
+    'd',
+    'M23.2 30C15.2 30 11.2 34 11.2 42V63.6C11.2 68.4 8.8 70.8 4 70.8C8.8 70.8 11.2 73.2 11.2 78V99.6C11.2 107.6 15.2 111.6 23.2 111.6',
+  );
+  lb.setAttribute('stroke', '#4A9EFF');
+  lb.setAttribute('stroke-width', '6');
+  lb.setAttribute('fill', 'none');
+  lb.setAttribute('stroke-linecap', 'round');
+  svg.appendChild(lb);
+
+  // Right bracket
+  const rb = document.createElementNS(ns, 'path');
+  rb.setAttribute(
+    'd',
+    'M104.8 30C112.8 30 116.8 34 116.8 42V63.6C116.8 68.4 119.2 70.8 124 70.8C119.2 70.8 116.8 73.2 116.8 78V99.6C116.8 107.6 112.8 111.6 104.8 111.6',
+  );
+  rb.setAttribute('stroke', '#4A9EFF');
+  rb.setAttribute('stroke-width', '6');
+  rb.setAttribute('fill', 'none');
+  rb.setAttribute('stroke-linecap', 'round');
+  svg.appendChild(rb);
+
+  // Cookie
+  const cookie = document.createElementNS(ns, 'circle');
+  cookie.setAttribute('cx', '64');
+  cookie.setAttribute('cy', '70.8');
+  cookie.setAttribute('r', '32.4');
+  cookie.setAttribute('fill', '#e8a040');
+  svg.appendChild(cookie);
+
+  // Chips
+  for (const [cx, cy, r] of [
+    [49.6, 63.6, 5.5],
+    [65.2, 84, 4.8],
+  ]) {
+    const chip = document.createElementNS(ns, 'circle');
+    chip.setAttribute('cx', String(cx));
+    chip.setAttribute('cy', String(cy));
+    chip.setAttribute('r', String(r));
+    chip.setAttribute('fill', '#5c3317');
+    svg.appendChild(chip);
+  }
+
+  return svg;
+}
 
 /** 301.st brand logo — filled SVG (not stroke-based like Lucide icons) */
 export function svg301Logo(size = 16): SVGSVGElement {
