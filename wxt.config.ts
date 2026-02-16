@@ -23,8 +23,12 @@ export default defineConfig({
     homepage_url: 'https://cookiepeek.com',
     default_locale: 'en',
 
-    permissions: ['cookies', 'activeTab', 'storage'],
+    permissions: ['cookies', 'activeTab'],
     host_permissions: ['<all_urls>'],
+
+    content_security_policy: {
+      extension_pages: "script-src 'self'; object-src 'self'",
+    },
 
     icons: {
       16: 'icons/16.png',
