@@ -1,6 +1,6 @@
 {
   "name": "cookiepeek",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "View, decode, edit, and export cookies in one click. JWT decode, anti-detect ready export, zero telemetry.",
   "type": "module",
   "scripts": {
