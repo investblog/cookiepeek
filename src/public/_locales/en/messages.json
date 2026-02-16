@@ -3,7 +3,7 @@
     "message": "CookiePeek"
   },
   "EXTENSION_DESCRIPTION": {
-    "message": "View, decode, edit, and export cookies in one click. JWT decode, anti-detect ready export, zero telemetry."
+    "message": "Fast, privacy-first cookie manager for developers, QA, and anyone who needs full control over site cookies."
   },
   "POPUP_TITLE": {
     "message": "CookiePeek"

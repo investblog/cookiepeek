@@ -555,6 +555,12 @@ a.popup__title:hover {
   margin-bottom: var(--space-1);
 }
 
+.drawer__label--with-action {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
 .drawer__input {
   width: 100%;
   padding: var(--space-1) var(--space-2);

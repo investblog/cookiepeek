@@ -1,5 +1,5 @@
 import type { CookieRecord, SameSiteValue } from '@shared/types/cookies';
-import { el, ICONS, svgIcon } from '../helpers';
+import { copyToClipboard, el, ICONS, svgIcon } from '../helpers';
 
 export function showCookieModal(
   cookie: CookieRecord | null,
@@ -29,8 +29,26 @@ export function showCookieModal(
   const nameField = createField('Name', 'text', cookie?.name ?? '');
   body.appendChild(nameField.wrap);
 
-  // Value
+  // Value (with copy button)
   const valueField = createField('Value', 'textarea', cookie?.value ?? '');
+  const valueLabelWrap = valueField.wrap.querySelector('.drawer__label')!;
+  valueLabelWrap.classList.add('drawer__label--with-action');
+  const copyBtn = el('button', 'btn btn--ghost btn--icon');
+  copyBtn.type = 'button';
+  copyBtn.title = 'Copy value';
+  copyBtn.appendChild(svgIcon(ICONS.copy, 13));
+  copyBtn.addEventListener('click', () => {
+    copyToClipboard(valueField.input.value).then((ok) => {
+      if (ok) {
+        const icon = copyBtn.querySelector('svg')!;
+        icon.style.color = 'var(--success)';
+        setTimeout(() => {
+          icon.style.color = '';
+        }, 2000);
+      }
+    });
+  });
+  valueLabelWrap.appendChild(copyBtn);
   body.appendChild(valueField.wrap);
 
   // Domain + Path row
