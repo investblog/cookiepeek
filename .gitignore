@@ -29,5 +29,6 @@ npm-debug.log*
 # Zip files (for store submission)
 *.zip
 
-# Claude Code local settings
+# Claude Code
 .claude/
+CLAUDE.md
