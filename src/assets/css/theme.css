@@ -1,0 +1,282 @@
+/* =========================
+   301.st – THEME TOKENS
+   - Colors
+   - Typography
+   - Base variables
+   ========================= */
+
+:root {
+  color-scheme: light dark;
+
+  /* Blues (primary brand) */
+  --blue-900: #003682;
+  --blue-700: #0055DC;
+  --blue-500: #3475C0;
+  --blue-300: #408BC9;
+  --blue-neon: #4DA3FF;
+
+  /* Oranges */
+  --orange-500: #F48120;
+  --orange-700: #F38020;
+  --orange-900: #C65000;
+
+  /* Neutrals */
+  --gray-950: #000000;
+  --gray-900: #111111;
+  --gray-800: #222222;
+  --gray-700: #333333;
+  --gray-600: #404242;
+  --gray-500: #424242;
+  --gray-400: #808080;
+
+  --gray-50:  #F8FBFB;
+  --gray-100: #F7F7F8;
+  --gray-200: #F4F8FC;
+  --gray-250: #EAEBEB;
+  --gray-300: #E5E5E4;
+  --gray-350: #CAC8C8;
+
+  /* Semantic */
+  --danger: #FF4F6E;
+  --success: #18C27A;
+  --warning: #FFB347;
+  --info: #3B82F6;
+
+  /* Typography */
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Segoe UI", sans-serif;
+
+  --fs-body: 1rem;
+  --lh-body: 1.5;
+
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.125rem;
+  --fs-xl: 1.375rem;
+
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+
+  /* Radii */
+  --radius-xs: 0.25rem;
+  --radius: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --r-pill: 999px;
+
+  --border-width: 1px;
+  --border-style: solid;
+
+  --transition-fast: 120ms ease-out;
+  --transition-md: 160ms ease-out;
+
+  --shadow-sm-light: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md-light: 0 6px 18px rgba(0, 0, 0, 0.12);
+  --shadow-sm-dark: 0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-md-dark: 0 6px 18px rgba(0, 0, 0, 0.45);
+
+  --shadow-sm: var(--shadow-sm-light);
+  --shadow-md: var(--shadow-md-light);
+}
+
+/* DARK THEME */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #111111;
+  --bg-elevated: #181A1F;
+  --bg-soft: #1F2229;
+
+  --panel: var(--bg-elevated);
+  --panel-border: color-mix(in srgb, var(--gray-100) 22%, transparent);
+
+  --text-main: #E7E9EE;
+  --text-muted: #A0A4AF;
+  --text-subtle: #7A7E87;
+
+  --text: var(--text-main);
+  --muted: var(--text-muted);
+
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --shadow-sm: var(--shadow-sm-dark);
+  --shadow-md: var(--shadow-md-dark);
+
+  --primary: #3475C0;
+  --primary-soft: rgba(77, 163, 255, 0.1);
+  --primary-hover: #4DA3FF;
+
+  --brand: var(--primary);
+  --ok: var(--success);
+
+  --danger-bg: #3D0915;
+  --success-bg: #042C1C;
+  --warning-bg: #38240A;
+
+  --notice-success-bg: color-mix(in srgb, var(--ok) 22%, var(--bg-soft));
+  --notice-success-fg: color-mix(in srgb, var(--ok) 85%, #ffffff 15%);
+  --notice-error-bg: color-mix(in srgb, var(--danger) 26%, var(--bg-soft));
+  --notice-error-fg: color-mix(in srgb, var(--danger) 86%, #ffffff 12%);
+  --notice-info-bg: color-mix(in srgb, var(--brand) 30%, var(--bg-soft));
+  --notice-info-fg: color-mix(in srgb, var(--brand) 30%, var(--text-main) 70%);
+
+  --input-bg: rgba(15, 16, 22, 0.9);
+  --input-border: var(--border-subtle);
+  --input-border-focus: rgba(77, 163, 255, 0.8);
+}
+
+/* LIGHT THEME */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #FFFFFF;
+  --bg-elevated: #F7F7F8;
+  --bg-soft: #F4F8FC;
+
+  --panel: var(--bg-elevated);
+  --panel-border: color-mix(in srgb, var(--gray-900) 18%, transparent);
+
+  --text-main: #111111;
+  --text-muted: #666A73;
+  --text-subtle: #8A8F99;
+
+  --text: var(--text-main);
+  --muted: var(--text-muted);
+
+  --border-subtle: rgba(15, 23, 42, 0.06);
+  --border-strong: rgba(15, 23, 42, 0.16);
+  --shadow-sm: var(--shadow-sm-light);
+  --shadow-md: var(--shadow-md-light);
+
+  --primary: #0055DC;
+  --primary-soft: rgba(0, 85, 220, 0.08);
+  --primary-hover: #003682;
+
+  --brand: var(--primary);
+  --ok: var(--success);
+
+  --danger-bg: #FDE6EA;
+  --success-bg: #E0F7EE;
+  --warning-bg: #FFF1D8;
+
+  --notice-success-bg: color-mix(in srgb, var(--ok) 15%, var(--bg-soft));
+  --notice-success-fg: color-mix(in srgb, var(--ok) 70%, #0f1a0f 30%);
+  --notice-error-bg: color-mix(in srgb, var(--danger) 16%, #FFFFFF);
+  --notice-error-fg: color-mix(in srgb, var(--danger) 72%, #0f0f0f 28%);
+  --notice-info-bg: color-mix(in srgb, var(--brand) 14%, var(--bg-soft));
+  --notice-info-fg: color-mix(in srgb, var(--brand) 68%, #0b182c 32%);
+
+  --input-bg: #FFFFFF;
+  --input-border: var(--border-subtle);
+  --input-border-focus: rgba(0, 85, 220, 0.8);
+}
+
+/* Auto mode — uses prefers-color-scheme when no data-theme is set */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+
+    --bg: #111111;
+    --bg-elevated: #181A1F;
+    --bg-soft: #1F2229;
+
+    --panel: var(--bg-elevated);
+    --panel-border: color-mix(in srgb, var(--gray-100) 22%, transparent);
+
+    --text-main: #E7E9EE;
+    --text-muted: #A0A4AF;
+    --text-subtle: #7A7E87;
+
+    --text: var(--text-main);
+    --muted: var(--text-muted);
+
+    --border-subtle: rgba(255, 255, 255, 0.06);
+    --border-strong: rgba(255, 255, 255, 0.14);
+    --shadow-sm: var(--shadow-sm-dark);
+    --shadow-md: var(--shadow-md-dark);
+
+    --primary: #3475C0;
+    --primary-soft: rgba(77, 163, 255, 0.1);
+    --primary-hover: #4DA3FF;
+
+    --brand: var(--primary);
+    --ok: var(--success);
+
+    --danger-bg: #3D0915;
+    --success-bg: #042C1C;
+    --warning-bg: #38240A;
+
+    --notice-success-bg: color-mix(in srgb, var(--ok) 22%, var(--bg-soft));
+    --notice-success-fg: color-mix(in srgb, var(--ok) 85%, #ffffff 15%);
+    --notice-error-bg: color-mix(in srgb, var(--danger) 26%, var(--bg-soft));
+    --notice-error-fg: color-mix(in srgb, var(--danger) 86%, #ffffff 12%);
+    --notice-info-bg: color-mix(in srgb, var(--brand) 30%, var(--bg-soft));
+    --notice-info-fg: color-mix(in srgb, var(--brand) 30%, var(--text-main) 70%);
+
+    --input-bg: rgba(15, 16, 22, 0.9);
+    --input-border: var(--border-subtle);
+    --input-border-focus: rgba(77, 163, 255, 0.8);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    color-scheme: light;
+
+    --bg: #FFFFFF;
+    --bg-elevated: #F7F7F8;
+    --bg-soft: #F4F8FC;
+
+    --panel: var(--bg-elevated);
+    --panel-border: color-mix(in srgb, var(--gray-900) 18%, transparent);
+
+    --text-main: #111111;
+    --text-muted: #666A73;
+    --text-subtle: #8A8F99;
+
+    --text: var(--text-main);
+    --muted: var(--text-muted);
+
+    --border-subtle: rgba(15, 23, 42, 0.06);
+    --border-strong: rgba(15, 23, 42, 0.16);
+    --shadow-sm: var(--shadow-sm-light);
+    --shadow-md: var(--shadow-md-light);
+
+    --primary: #0055DC;
+    --primary-soft: rgba(0, 85, 220, 0.08);
+    --primary-hover: #003682;
+
+    --brand: var(--primary);
+    --ok: var(--success);
+
+    --danger-bg: #FDE6EA;
+    --success-bg: #E0F7EE;
+    --warning-bg: #FFF1D8;
+
+    --notice-success-bg: color-mix(in srgb, var(--ok) 15%, var(--bg-soft));
+    --notice-success-fg: color-mix(in srgb, var(--ok) 70%, #0f1a0f 30%);
+    --notice-error-bg: color-mix(in srgb, var(--danger) 16%, #FFFFFF);
+    --notice-error-fg: color-mix(in srgb, var(--danger) 72%, #0f0f0f 28%);
+    --notice-info-bg: color-mix(in srgb, var(--brand) 14%, var(--bg-soft));
+    --notice-info-fg: color-mix(in srgb, var(--brand) 68%, #0b182c 32%);
+
+    --input-bg: #FFFFFF;
+    --input-border: var(--border-subtle);
+    --input-border-focus: rgba(0, 85, 220, 0.8);
+  }
+}
+
+a {
+  color: inherit;
+}

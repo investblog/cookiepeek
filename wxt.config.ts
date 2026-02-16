@@ -1,0 +1,53 @@
+import path from 'node:path';
+import { defineConfig } from 'wxt';
+
+export default defineConfig({
+  srcDir: 'src',
+  outDir: 'dist',
+
+  vite: () => ({
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, 'src'),
+        '@shared': path.resolve(__dirname, 'src/shared'),
+        '@background': path.resolve(__dirname, 'src/background'),
+      },
+    },
+  }),
+
+  manifest: ({ browser }) => ({
+    name: '__MSG_EXTENSION_NAME__',
+    description: '__MSG_EXTENSION_DESCRIPTION__',
+    version: '1.0.0',
+    author: 'CookiePeek <support@cookiepeek.com>',
+    homepage_url: 'https://cookiepeek.com',
+    default_locale: 'en',
+
+    ...(browser === 'chrome' && { minimum_chrome_version: '116' }),
+
+    permissions: ['cookies', 'activeTab', 'storage'],
+
+    host_permissions: ['<all_urls>'],
+
+    icons: {
+      16: 'icons/16.png',
+      32: 'icons/32.png',
+      48: 'icons/48.png',
+      128: 'icons/128.png',
+    },
+
+    ...(browser === 'firefox' && {
+      browser_specific_settings: {
+        gecko: {
+          id: 'cookiepeek@cookiepeek.com',
+          strict_min_version: '109.0',
+          data_collection_permissions: {
+            required: ['none'],
+          },
+        },
+      },
+    }),
+  }),
+
+  browser: 'chrome',
+});

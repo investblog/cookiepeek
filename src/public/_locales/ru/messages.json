@@ -1,0 +1,116 @@
+{
+  "EXTENSION_NAME": {
+    "message": "CookiePeek"
+  },
+  "EXTENSION_DESCRIPTION": {
+    "message": "Просмотр, декодирование, редактирование и экспорт cookie в один клик. Декодирование JWT, экспорт для антидетект-браузеров, без телеметрии."
+  },
+  "POPUP_TITLE": {
+    "message": "CookiePeek"
+  },
+  "SEARCH_PLACEHOLDER": {
+    "message": "Поиск cookie..."
+  },
+  "EXPORT_JSON": {
+    "message": "Экспорт в JSON"
+  },
+  "EXPORT_NETSCAPE": {
+    "message": "Экспорт в cookies.txt"
+  },
+  "EXPORT_ANTIDETECT": {
+    "message": "Экспорт Anti-Detect JSON"
+  },
+  "EXPORT_HEADER": {
+    "message": "Экспорт как Header String"
+  },
+  "IMPORT_COOKIES": {
+    "message": "Импорт cookie"
+  },
+  "ADD_COOKIE": {
+    "message": "Добавить cookie"
+  },
+  "DELETE_SELECTED": {
+    "message": "Удалить выбранные ($COUNT$)",
+    "placeholders": {
+      "COUNT": { "content": "$1" }
+    }
+  },
+  "DECODE_JWT": {
+    "message": "JWT-токен"
+  },
+  "DECODE_BASE64": {
+    "message": "Base64"
+  },
+  "DECODE_URL": {
+    "message": "URL-кодирование"
+  },
+  "DECODE_RAW": {
+    "message": "Исходное значение"
+  },
+  "WARNING_SENSITIVE_DATA": {
+    "message": "Cookie содержат конфиденциальные данные сессии. Экспортируйте с осторожностью."
+  },
+  "COOKIE_SESSION": {
+    "message": "Сессия"
+  },
+  "COOKIE_COUNT": {
+    "message": "$COUNT$ cookie",
+    "placeholders": {
+      "COUNT": { "content": "$1" }
+    }
+  },
+  "CONFIRM_DELETE": {
+    "message": "Удалить этот cookie?"
+  },
+  "CONFIRM_BULK_DELETE": {
+    "message": "Удалить $COUNT$ выбранных cookie?",
+    "placeholders": {
+      "COUNT": { "content": "$1" }
+    }
+  },
+  "IMPORT_SUCCESS": {
+    "message": "Импортировано $COUNT$ cookie",
+    "placeholders": {
+      "COUNT": { "content": "$1" }
+    }
+  },
+  "EXPORT_SUCCESS": {
+    "message": "Скопировано в буфер обмена"
+  },
+  "NO_COOKIES": {
+    "message": "Cookie для этой страницы не найдены"
+  },
+  "THEME_TOGGLE": {
+    "message": "Переключить тему"
+  },
+  "EDIT_COOKIE": {
+    "message": "Редактировать cookie"
+  },
+  "SAVE": {
+    "message": "Сохранить"
+  },
+  "CANCEL": {
+    "message": "Отмена"
+  },
+  "NAME": {
+    "message": "Имя"
+  },
+  "VALUE": {
+    "message": "Значение"
+  },
+  "DOMAIN": {
+    "message": "Домен"
+  },
+  "PATH": {
+    "message": "Путь"
+  },
+  "EXPIRES": {
+    "message": "Истекает"
+  },
+  "FLAGS": {
+    "message": "Флаги"
+  },
+  "ACTIONS": {
+    "message": "Действия"
+  }
+}

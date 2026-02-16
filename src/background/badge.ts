@@ -1,0 +1,34 @@
+import { BADGE_COLOR, BADGE_MAX_COUNT } from '@shared/constants';
+import { browser } from 'wxt/browser';
+
+function formatBadgeText(count: number): string {
+  if (!Number.isFinite(count) || count <= 0) return '';
+  if (count > BADGE_MAX_COUNT) return `${BADGE_MAX_COUNT}+`;
+  return String(count);
+}
+
+export async function updateBadgeForTab(tabId: number): Promise<void> {
+  if (!browser?.action?.setBadgeText) return;
+  if (typeof tabId !== 'number' || tabId < 0) return;
+
+  try {
+    const tab = await browser.tabs.get(tabId);
+    if (!tab?.url || tab.url.startsWith('chrome://') || tab.url.startsWith('about:')) {
+      await browser.action.setBadgeText({ tabId, text: '' });
+      return;
+    }
+
+    const cookies = await browser.cookies.getAll({ url: tab.url });
+    const text = formatBadgeText(cookies.length);
+    await browser.action.setBadgeText({ tabId, text });
+
+    if (text) {
+      await browser.action.setBadgeBackgroundColor({ tabId, color: BADGE_COLOR });
+    }
+  } catch (error) {
+    const err = error as Error;
+    if (!err?.message?.includes('No tab with id')) {
+      console.error('Badge update failed:', error);
+    }
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "EXTENSION_NAME": {
+    "message": "CookiePeek"
+  },
+  "EXTENSION_DESCRIPTION": {
+    "message": "View, decode, edit, and export cookies in one click. JWT decode, anti-detect ready export, zero telemetry."
+  },
+  "POPUP_TITLE": {
+    "message": "CookiePeek"
+  },
+  "SEARCH_PLACEHOLDER": {
+    "message": "Search cookies..."
+  },
+  "EXPORT_JSON": {
+    "message": "Export as JSON"
+  },
+  "EXPORT_NETSCAPE": {
+    "message": "Export as cookies.txt"
+  },
+  "EXPORT_ANTIDETECT": {
+    "message": "Export Anti-Detect JSON"
+  },
+  "EXPORT_HEADER": {
+    "message": "Export as Header String"
+  },
+  "IMPORT_COOKIES": {
+    "message": "Import Cookies"
+  },
+  "ADD_COOKIE": {
+    "message": "Add Cookie"
+  },
+  "DELETE_SELECTED": {
+    "message": "Delete Selected ($COUNT$)",
+    "placeholders": {
+      "COUNT": { "content": "$1" }
+    }
+  },
+  "DECODE_JWT": {
+    "message": "JWT Token"
+  },
+  "DECODE_BASE64": {
+    "message": "Base64"
+  },
+  "DECODE_URL": {
+    "message": "URL Encoded"
+  },
+  "DECODE_RAW": {
+    "message": "Raw Value"
+  },
+  "WARNING_SENSITIVE_DATA": {
+    "message": "Cookies contain sensitive session data. Export with caution."
+  },
+  "COOKIE_SESSION": {
+    "message": "Session"
+  },
+  "COOKIE_COUNT": {
+    "message": "$COUNT$ cookies",
+    "placeholders": {
+      "COUNT": { "content": "$1" }
+    }
+  },
+  "CONFIRM_DELETE": {
+    "message": "Delete this cookie?"
+  },
+  "CONFIRM_BULK_DELETE": {
+    "message": "Delete $COUNT$ selected cookies?",
+    "placeholders": {
+      "COUNT": { "content": "$1" }
+    }
+  },
+  "IMPORT_SUCCESS": {
+    "message": "Imported $COUNT$ cookies",
+    "placeholders": {
+      "COUNT": { "content": "$1" }
+    }
+  },
+  "EXPORT_SUCCESS": {
+    "message": "Copied to clipboard"
+  },
+  "NO_COOKIES": {
+    "message": "No cookies found for this page"
+  },
+  "THEME_TOGGLE": {
+    "message": "Toggle theme"
+  },
+  "EDIT_COOKIE": {
+    "message": "Edit Cookie"
+  },
+  "SAVE": {
+    "message": "Save"
+  },
+  "CANCEL": {
+    "message": "Cancel"
+  },
+  "NAME": {
+    "message": "Name"
+  },
+  "VALUE": {
+    "message": "Value"
+  },
+  "DOMAIN": {
+    "message": "Domain"
+  },
+  "PATH": {
+    "message": "Path"
+  },
+  "EXPIRES": {
+    "message": "Expires"
+  },
+  "FLAGS": {
+    "message": "Flags"
+  },
+  "ACTIONS": {
+    "message": "Actions"
+  }
+}
