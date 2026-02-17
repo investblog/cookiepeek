@@ -69,4 +69,4 @@ Full privacy policy: [PRIVACY.md](docs/PRIVACY.md)
 
 ---
 
-Built by [investblog](https://github.com/investblog) with [Claude](https://claude.ai)
+Built by [investblog](https://github.com/investblog) at [301.st](https://301.st) with [Claude](https://claude.ai)
