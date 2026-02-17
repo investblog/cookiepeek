@@ -47,8 +47,10 @@ function formatAntiDetect(cookies: CookieRecord[]): string {
     domain: c.domain,
     path: c.path,
     expirationDate: c.expirationDate ? Math.floor(c.expirationDate) : 0,
-    secure: c.secure,
+    hostOnly: !c.domain.startsWith('.'),
     httpOnly: c.httpOnly,
+    secure: c.secure,
+    session: !c.expirationDate,
     sameSite: c.sameSite === 'unspecified' ? 'no_restriction' : c.sameSite,
   }));
   return JSON.stringify(output, null, 2);

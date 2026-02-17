@@ -10,7 +10,18 @@ import { showImportDialog } from './components/import-dialog';
 import { createSearch, filterCookies } from './components/search';
 import { cookieKey, createTable, sortCookies } from './components/table';
 import { createBulkBar, createToolbar } from './components/toolbar';
-import { copyToClipboard, downloadFile, el, ICONS, showToast, svg301Logo, svgBrandIcon, svgIcon } from './helpers';
+import {
+  copyToClipboard,
+  downloadFile,
+  el,
+  ICONS,
+  showToast,
+  svg301Logo,
+  svgBrandIcon,
+  svgGitHub,
+  svgIcon,
+  svgTelegram,
+} from './helpers';
 
 // ---- State ----
 let allCookies: CookieRecord[] = [];
@@ -98,6 +109,26 @@ function buildUI(): void {
   const footerCount = el('span');
   footerCount.id = 'footer-count';
   footer.appendChild(footerCount);
+
+  const footerLinks = el('div', 'popup__footer-links');
+  const tgLink = document.createElement('a');
+  tgLink.href = 'https://t.me/cookiepeek';
+  tgLink.target = '_blank';
+  tgLink.rel = 'noopener';
+  tgLink.className = 'popup__footer-link';
+  tgLink.title = 'Telegram';
+  tgLink.appendChild(svgTelegram(14));
+  footerLinks.appendChild(tgLink);
+  const ghLink = document.createElement('a');
+  ghLink.href = 'https://github.com/investblog/cookiepeek/issues';
+  ghLink.target = '_blank';
+  ghLink.rel = 'noopener';
+  ghLink.className = 'popup__footer-link';
+  ghLink.title = 'Feedback';
+  ghLink.appendChild(svgGitHub(14));
+  footerLinks.appendChild(ghLink);
+  footer.appendChild(footerLinks);
+
   const sponsor = document.createElement('a');
   sponsor.href = 'https://301.st/?utm_source=cookiepeek&utm_medium=extension&utm_campaign=footer';
   sponsor.target = '_blank';

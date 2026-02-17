@@ -151,6 +151,63 @@ export function svgBrandIcon(size = 18): SVGSVGElement {
   return svg;
 }
 
+/** Telegram brand icon — original gradient fill */
+export function svgTelegram(size = 14): SVGSVGElement {
+  const ns = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('width', String(size));
+  svg.setAttribute('height', String(size));
+  svg.setAttribute('viewBox', '0 0 20 20');
+  svg.setAttribute('fill', 'none');
+  const bg = document.createElementNS(ns, 'path');
+  bg.setAttribute('d', 'M10 20c5.523 0 10-4.477 10-10S15.523 0 10 0 0 4.477 0 10s4.477 10 10 10');
+  bg.setAttribute('fill', 'url(#tg)');
+  svg.appendChild(bg);
+  const fg = document.createElementNS(ns, 'path');
+  fg.setAttribute(
+    'd',
+    'M14.99 5.863c.09-.575-.458-1.029-.97-.804L3.833 9.532c-.367.161-.34.717.04.838l2.102.67c.4.127.835.06 1.185-.181l4.737-3.273c.143-.099.299.104.177.23l-3.41 3.516a.765.765 0 0 0 .133 1.168l3.818 2.395c.428.268.979-.002 1.059-.52z',
+  );
+  fg.setAttribute('fill', '#fff');
+  svg.appendChild(fg);
+  const defs = document.createElementNS(ns, 'defs');
+  const grad = document.createElementNS(ns, 'linearGradient');
+  grad.setAttribute('id', 'tg');
+  grad.setAttribute('x1', '10');
+  grad.setAttribute('y1', '0');
+  grad.setAttribute('x2', '10');
+  grad.setAttribute('y2', '20');
+  grad.setAttribute('gradientUnits', 'userSpaceOnUse');
+  const s1 = document.createElementNS(ns, 'stop');
+  s1.setAttribute('stop-color', '#37bbfe');
+  grad.appendChild(s1);
+  const s2 = document.createElementNS(ns, 'stop');
+  s2.setAttribute('offset', '1');
+  s2.setAttribute('stop-color', '#007dbb');
+  grad.appendChild(s2);
+  defs.appendChild(grad);
+  svg.appendChild(defs);
+  return svg;
+}
+
+/** GitHub brand icon — uses currentColor */
+export function svgGitHub(size = 14): SVGSVGElement {
+  const ns = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('width', String(size));
+  svg.setAttribute('height', String(size));
+  svg.setAttribute('viewBox', '0 0 20 20');
+  svg.setAttribute('fill', 'none');
+  const path = document.createElementNS(ns, 'path');
+  path.setAttribute(
+    'd',
+    'M10 0a10 10 0 0 0-3.162 19.487c.5.088.687-.212.687-.475 0-.237-.012-1.025-.012-1.862-2.513.462-3.163-.613-3.363-1.175a3.64 3.64 0 0 0-1.025-1.413c-.35-.187-.85-.65-.013-.662a2 2 0 0 1 1.538 1.025 2.135 2.135 0 0 0 2.912.825 2.1 2.1 0 0 1 .638-1.338c-2.225-.25-4.55-1.112-4.55-4.937a3.9 3.9 0 0 1 1.025-2.688 3.6 3.6 0 0 1 .1-2.65s.837-.262 2.75 1.025a9.43 9.43 0 0 1 5 0c1.912-1.3 2.75-1.025 2.75-1.025a3.6 3.6 0 0 1 .1 2.65A3.87 3.87 0 0 1 16.4 9.475c0 3.837-2.338 4.687-4.562 4.937a2.37 2.37 0 0 1 .674 1.85c0 1.338-.012 2.413-.012 2.75 0 .263.187.575.687.475A10.005 10.005 0 0 0 10 0',
+  );
+  path.setAttribute('fill', 'currentColor');
+  svg.appendChild(path);
+  return svg;
+}
+
 /** 301.st brand logo — filled SVG (not stroke-based like Lucide icons) */
 export function svg301Logo(size = 16): SVGSVGElement {
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');

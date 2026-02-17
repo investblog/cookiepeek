@@ -698,6 +698,23 @@ a.popup__title:hover {
   color: var(--text-muted);
 }
 
+.popup__footer-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.popup__footer-link {
+  display: inline-flex;
+  color: var(--text-subtle);
+  opacity: 0.6;
+  transition: opacity var(--transition-fast);
+}
+
+.popup__footer-link:hover {
+  opacity: 1;
+}
+
 /* ---- Import dialog ---- */
 
 .import-dialog__tabs {
