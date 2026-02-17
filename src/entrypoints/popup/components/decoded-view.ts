@@ -72,12 +72,15 @@ export function updateDecodedPanel(panel: HTMLElement, decoded: DecodedValue): v
     if (b.dataset.mode === decoded.mode) {
       b.className = 'btn btn--sm btn--primary';
       b.disabled = false;
+      b.title = '';
     } else if (isValid) {
       b.className = 'btn btn--sm btn--secondary';
       b.disabled = false;
+      b.title = '';
     } else {
       b.className = 'btn btn--sm btn--secondary btn--disabled';
       b.disabled = true;
+      b.title = `Value is not valid ${(b.dataset.mode ?? '').toUpperCase()}`;
     }
   }
 
