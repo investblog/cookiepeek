@@ -1,56 +1,72 @@
+![CookiePeek](assets/banner-1400x560.png)
+
 # CookiePeek
 
-Fast peek and control over cookies — one click, no extra steps.
+Privacy-first cookie manager for developers — view, search, decode, edit, export & import cookies with zero telemetry.
 
-Browser extension for viewing, decoding, editing, and exporting cookies. Built for developers, QA engineers, and multi-account operators.
+[![Chrome Web Store](https://img.shields.io/badge/Chrome-Web%20Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/cookiepeek/)
+[![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefox&logoColor=white)](https://addons.mozilla.org/firefox/addon/cookiepeek/)
+[![Edge Add-ons](https://img.shields.io/badge/Edge-Add--ons-0078D7?logo=microsoftedge&logoColor=white)](https://microsoftedge.microsoft.com/addons/detail/cookiepeek/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
 
 ## Features
 
-- **Instant cookie table** with search, sort, and bulk operations
-- **Auto-decode** JWT, Base64, and URL-encoded values inline
-- **Export** as JSON, Netscape cookies.txt, Anti-Detect JSON, or Header string
-- **Import** from JSON or Netscape format (paste or file upload)
-- **Add / Edit / Delete** cookies with a slide-in drawer UI
-- **Zero telemetry** — no network requests, no analytics, everything local
-- **Dark / Light theme** with system preference support
+- **Instant cookie table** — every cookie for the current site with name, value, domain, path, expiry, and flags. Search and sort by any column
+- **Inline decode** — JWT tokens, Base64, and URL-encoded values decoded automatically. Switch modes manually or let CookiePeek detect the format
+- **Edit & add cookies** — modify any field through a clean slide-in panel. Add new cookies from scratch
+- **Bulk operations** — select multiple cookies and delete them in one click
+- **Export** — JSON, Netscape cookies.txt, Header string, Profile JSON
+- **Import** — paste or upload cookies in JSON or Netscape format with auto-detection
+- **Dark & light theme** — follows system preference or toggle manually
+- **Fully local** — no accounts, no analytics, no network requests, no data leaves your browser
 
 ## Install
 
-| Browser | Store |
-|---------|-------|
-| Chrome | *Coming soon* |
-| Edge | *Coming soon* |
-| Firefox | *Coming soon* |
-| Opera | *Coming soon* |
+| Browser | Link |
+|---------|------|
+| Chrome | [Chrome Web Store](https://chromewebstore.google.com/detail/cookiepeek/) |
+| Firefox | [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/cookiepeek/) |
+| Edge | [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/cookiepeek/) |
+
+## How it works
+
+Click the toolbar icon on any site — CookiePeek reads cookies via the browser cookies API and displays them in a sortable, searchable table. Values are decoded inline (JWT, Base64, URL-encoded). Edit any cookie in a slide-in drawer, export in multiple formats, or import cookies from a file or clipboard.
+
+Everything happens locally in the popup. No data is stored, transmitted, or logged.
 
 ## Development
 
 ```bash
+git clone https://github.com/investblog/cookiepeek.git
+cd cookiepeek
 npm install
-npm run dev            # Chrome dev server with HMR
-npm run dev:firefox    # Firefox dev server
-npm run build:all      # Production builds for all browsers
-npm run check          # TypeScript + Biome lint + Vitest tests
+
+npm run dev            # Chrome MV3 dev server with HMR
+npm run dev:firefox    # Firefox MV2 dev server
+npm run build          # Chrome production build
+npm run build:firefox  # Firefox production build
+npm run zip:all        # Build all platforms
+npm run check          # Typecheck + lint + test
 ```
 
-### Build targets
+## Tech stack
 
-```bash
-npm run build          # Chrome MV3   → dist/chrome-mv3/
-npm run build:firefox  # Firefox MV2  → dist/firefox-mv2/
-npm run build:edge     # Edge MV3     → dist/edge-mv3/
-npm run build:opera    # Opera MV3    → dist/opera-mv3/
-npm run zip:all        # Zip packages for all stores
-```
+- [WXT](https://wxt.dev) — web extension framework with HMR
+- TypeScript strict mode
+- Vanilla DOM + CSS custom properties (no framework)
+- Chrome MV3 + Firefox MV2 + Edge MV3 builds
+- Zero runtime dependencies
 
-## Tech Stack
+## Privacy
 
-- [WXT](https://wxt.dev) — cross-browser extension framework
-- TypeScript (strict mode)
-- Vanilla DOM + CSS custom properties
-- [Biome](https://biomejs.dev) — linter + formatter
-- [Vitest](https://vitest.dev) — unit tests
+CookiePeek makes zero network requests. No analytics, no telemetry, no remote code. Cookie data is read on demand and never persisted to extension storage. The only local data is your theme preference.
+
+Full privacy policy: [PRIVACY.md](docs/PRIVACY.md)
 
 ## License
 
 [Apache 2.0](LICENSE)
+
+---
+
+Built by [investblog](https://github.com/investblog) with [Claude](https://claude.ai)
