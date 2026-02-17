@@ -4,9 +4,10 @@
 
 Privacy-first cookie manager for developers — view, search, decode, edit, export & import cookies with zero telemetry.
 
-[![Chrome Web Store](https://img.shields.io/badge/Chrome-Web%20Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/cookiepeek/)
+[![Chrome Web Store](https://img.shields.io/badge/Chrome-Web%20Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/neokbinekbljibacbahpflmdhinjhjjh)
 [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefox&logoColor=white)](https://addons.mozilla.org/firefox/addon/cookiepeek/)
-[![Edge Add-ons](https://img.shields.io/badge/Edge-Add--ons-0078D7?logo=microsoftedge&logoColor=white)](https://microsoftedge.microsoft.com/addons/detail/cookiepeek/)
+[![Edge Add-ons](https://img.shields.io/badge/Edge-Add--ons-0078D7?logo=microsoftedge&logoColor=white)](https://microsoftedge.microsoft.com/addons/detail/cachkpikjmlenneaknpganeffomgheig)
+[![Opera Add-ons](https://img.shields.io/badge/Opera-Add--ons-FF1B2D?logo=opera&logoColor=white)](https://addons.opera.com/extensions/details/cookiepeek/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
 
 ## Features
@@ -24,9 +25,10 @@ Privacy-first cookie manager for developers — view, search, decode, edit, expo
 
 | Browser | Link |
 |---------|------|
-| Chrome | [Chrome Web Store](https://chromewebstore.google.com/detail/cookiepeek/) |
+| Chrome | [Chrome Web Store](https://chromewebstore.google.com/detail/neokbinekbljibacbahpflmdhinjhjjh) |
 | Firefox | [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/cookiepeek/) |
-| Edge | [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/cookiepeek/) |
+| Edge | [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/cachkpikjmlenneaknpganeffomgheig) |
+| Opera | [Opera Add-ons](https://addons.opera.com/extensions/details/cookiepeek/) |
 
 ## How it works
 
