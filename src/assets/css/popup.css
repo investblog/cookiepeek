@@ -69,10 +69,18 @@ a.popup__title:hover {
   flex-shrink: 0;
 }
 
-.search-input {
+.search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
   flex: 1;
   min-width: 0;
+}
+
+.search-input {
+  width: 100%;
   padding: var(--space-1) var(--space-2);
+  padding-inline-end: calc(var(--space-2) + 22px);
   border: 1px solid var(--input-border);
   border-radius: var(--radius);
   background: var(--input-bg);
@@ -89,6 +97,37 @@ a.popup__title:hover {
 
 .search-input::placeholder {
   color: var(--text-subtle);
+}
+
+.search-wrap__clear {
+  position: absolute;
+  inset-inline-end: 4px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text-subtle);
+  cursor: pointer;
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.search-wrap__clear:hover {
+  color: var(--text);
+  background: var(--border-subtle);
+}
+
+.search-wrap__clear svg {
+  width: 14px;
+  height: 14px;
+}
+
+.search-wrap.has-value .search-wrap__clear {
+  display: inline-flex;
 }
 
 .toolbar-actions {

@@ -68,8 +68,8 @@ function buildUI(): void {
 
   // Toolbar row: search + actions
   const toolbarRow = el('div', 'popup__toolbar');
-  const searchInput = createSearch(onFilter);
-  toolbarRow.appendChild(searchInput);
+  const { wrap: searchWrap, input: searchInput } = createSearch(onFilter);
+  toolbarRow.appendChild(searchWrap);
   const toolbar = createToolbar({
     onExport: onExport,
     onImport: onImport,
