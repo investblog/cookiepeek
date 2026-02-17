@@ -317,7 +317,6 @@ a.popup__title:hover {
 .btn--disabled {
   opacity: 0.35;
   cursor: not-allowed;
-  pointer-events: none;
 }
 
 .btn--icon {

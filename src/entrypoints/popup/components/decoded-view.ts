@@ -46,7 +46,10 @@ export function createDecodedPanel(onClose: () => void, onForceMode: (mode: Deco
   for (const m of modeButtons) {
     const btn = el('button', 'btn btn--sm btn--secondary', m.label);
     btn.dataset.mode = m.mode;
-    btn.addEventListener('click', () => onForceMode(m.mode));
+    btn.addEventListener('click', () => {
+      if (btn.getAttribute('aria-disabled') === 'true') return;
+      onForceMode(m.mode);
+    });
     modes.appendChild(btn);
   }
   panel.appendChild(modes);
@@ -72,14 +75,17 @@ export function updateDecodedPanel(panel: HTMLElement, decoded: DecodedValue): v
     if (b.dataset.mode === decoded.mode) {
       b.className = 'btn btn--sm btn--primary';
       b.disabled = false;
+      b.removeAttribute('aria-disabled');
       b.title = '';
     } else if (isValid) {
       b.className = 'btn btn--sm btn--secondary';
       b.disabled = false;
+      b.removeAttribute('aria-disabled');
       b.title = '';
     } else {
       b.className = 'btn btn--sm btn--secondary btn--disabled';
-      b.disabled = true;
+      b.disabled = false;
+      b.setAttribute('aria-disabled', 'true');
       b.title = `Value is not valid ${(b.dataset.mode ?? '').toUpperCase()}`;
     }
   }
