@@ -38,7 +38,7 @@ export function showCookieModal(
   copyBtn.title = 'Copy value';
   copyBtn.appendChild(svgIcon(ICONS.copy, 13));
   copyBtn.addEventListener('click', () => {
-    copyToClipboard(valueField.input.value).then((ok) => {
+    void copyToClipboard(valueField.input.value).then((ok) => {
       if (ok) {
         const icon = copyBtn.querySelector('svg')!;
         icon.style.color = 'var(--success)';

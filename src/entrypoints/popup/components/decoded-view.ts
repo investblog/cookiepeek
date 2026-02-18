@@ -16,7 +16,7 @@ export function createDecodedPanel(onClose: () => void, onForceMode: (mode: Deco
   copyBtn.appendChild(svgIcon(ICONS.copy, 14));
   copyBtn.addEventListener('click', () => {
     if (!currentDecoded) return;
-    copyToClipboard(currentDecoded.decoded).then((ok) => {
+    void copyToClipboard(currentDecoded.decoded).then((ok) => {
       if (ok) {
         const icon = copyBtn.querySelector('svg')!;
         icon.style.color = 'var(--success)';

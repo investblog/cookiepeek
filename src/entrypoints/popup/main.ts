@@ -98,7 +98,7 @@ function buildUI(): void {
       updatePopupHeight();
     },
     (mode: DecodeMode) => {
-      if (currentDecodedCookie) onForceDecodeMode(currentDecodedCookie, mode);
+      if (currentDecodedCookie) void onForceDecodeMode(currentDecodedCookie, mode);
     },
   );
   app.appendChild(decodedPanel);
@@ -482,7 +482,7 @@ function getSelectedCookies(): CookieRecord[] {
 // ---- Init ----
 initTheme();
 buildUI();
-loadCookies().then(() => {
+void loadCookies().then(() => {
   const t1 = performance.now();
   console.log(`CookiePeek render: ${(t1 - t0).toFixed(1)}ms`);
 });

@@ -17,6 +17,9 @@
       },
       "suspicious": {
         "noExplicitAny": "off"
+      },
+      "nursery": {
+        "noFloatingPromises": "error"
       }
     }
   },
