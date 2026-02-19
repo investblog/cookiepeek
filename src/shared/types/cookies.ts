@@ -37,6 +37,14 @@ export interface DecodedValue {
   error?: string;
 }
 
+export type CookieChangeType = 'added' | 'changed' | 'removed';
+
+export interface CookieChangeEvent {
+  type: CookieChangeType;
+  cookie: CookieRecord;
+  timestamp: number;
+}
+
 export type SortField = 'name' | 'domain' | 'path' | 'expires' | 'size';
 export type SortDirection = 'asc' | 'desc';
 

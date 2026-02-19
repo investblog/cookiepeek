@@ -1,4 +1,4 @@
-import type { CookieRecord, DecodedValue, DecodeMode, ExportFormat } from '../types/cookies';
+import type { CookieChangeEvent, CookieRecord, DecodedValue, DecodeMode, ExportFormat } from '../types/cookies';
 
 export interface MessageMap {
   'cookiepeek:get-cookies': {
@@ -28,6 +28,14 @@ export interface MessageMap {
   'cookiepeek:import-cookies': {
     request: { input: string; format: 'json' | 'netscape'; url: string };
     response: { imported: number; errors: string[] };
+  };
+  'cookiepeek:cookie-changed': {
+    request: CookieChangeEvent;
+    response: undefined;
+  };
+  'cookiepeek:get-change-log': {
+    request: { domain?: string };
+    response: { log: CookieChangeEvent[] };
   };
 }
 

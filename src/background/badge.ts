@@ -1,4 +1,4 @@
-import { BADGE_COLOR, BADGE_MAX_COUNT } from '@shared/constants';
+import { BADGE_COLOR, BADGE_FLASH_COLOR, BADGE_FLASH_MS, BADGE_MAX_COUNT } from '@shared/constants';
 import { browser } from 'wxt/browser';
 
 /** Compat: Firefox MV2 uses browserAction, Chrome MV3 uses action */
@@ -12,6 +12,20 @@ function formatBadgeText(count: number): string {
 
 function isInternalUrl(url: string): boolean {
   return /^(chrome|about|edge|opera|moz-extension|chrome-extension):\/\//.test(url);
+}
+
+export async function flashBadge(tabId: number): Promise<void> {
+  if (!badgeApi?.setBadgeBackgroundColor) return;
+  if (typeof tabId !== 'number' || tabId < 0) return;
+
+  try {
+    await badgeApi.setBadgeBackgroundColor({ tabId, color: BADGE_FLASH_COLOR });
+    setTimeout(() => {
+      void badgeApi.setBadgeBackgroundColor({ tabId, color: BADGE_COLOR }).catch(() => {});
+    }, BADGE_FLASH_MS);
+  } catch {
+    // Tab may have been closed
+  }
 }
 
 export async function updateBadgeForTab(tabId: number): Promise<void> {

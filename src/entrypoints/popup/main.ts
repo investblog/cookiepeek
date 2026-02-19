@@ -1,8 +1,17 @@
+import { LIVE_UPDATE_DEBOUNCE_MS } from '@shared/constants';
 import type { MessageMap } from '@shared/messaging';
 import { sendMessageSafe } from '@shared/messaging';
 import { getTheme, initTheme, toggleTheme } from '@shared/theme';
-import type { CookieRecord, DecodedValue, DecodeMode, ExportFormat, SortState } from '@shared/types/cookies';
+import type {
+  CookieChangeEvent,
+  CookieRecord,
+  DecodedValue,
+  DecodeMode,
+  ExportFormat,
+  SortState,
+} from '@shared/types/cookies';
 import { browser } from 'wxt/browser';
+import { appendChangeLogEntry, createChangeLogPanel } from './components/change-log';
 import { showCookieModal } from './components/cookie-modal';
 import { createDecodedPanel, updateDecodedPanel } from './components/decoded-view';
 import { detectExportFilename, detectExportMime } from './components/export-menu';
@@ -35,6 +44,10 @@ let searchQuery = '';
 const t0 = performance.now();
 const app = document.getElementById('app')!;
 
+// ---- Live monitoring ----
+let liveDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+let changeLogOpen = false;
+
 // ---- Decoded panel (persistent, slide in/out) ----
 let decodedPanel: HTMLElement | null = null;
 let currentDecodedCookie: CookieRecord | null = null;
@@ -55,6 +68,11 @@ function buildUI(): void {
   header.appendChild(titleLink);
 
   const headerActions = el('div', 'popup__header-actions');
+  const logBtn = el('button', 'theme-toggle');
+  logBtn.title = 'Change log';
+  logBtn.appendChild(svgIcon(ICONS.clock, 16));
+  logBtn.addEventListener('click', onOpenChangeLog);
+  headerActions.appendChild(logBtn);
   const themeBtn = el('button', 'theme-toggle');
   themeBtn.title = 'Toggle theme';
   updateThemeIcon(themeBtn);
@@ -106,9 +124,15 @@ function buildUI(): void {
   // Footer
   const footer = el('div', 'popup__footer');
   footer.id = 'footer';
+  const footerCountWrap = el('span', 'popup__footer-count');
+  const liveDot = el('span', 'live-dot');
+  liveDot.id = 'live-dot';
+  liveDot.style.display = 'none';
+  footerCountWrap.appendChild(liveDot);
   const footerCount = el('span');
   footerCount.id = 'footer-count';
-  footer.appendChild(footerCount);
+  footerCountWrap.appendChild(footerCount);
+  footer.appendChild(footerCountWrap);
 
   const footerLinks = el('div', 'popup__footer-links');
   const tgLink = document.createElement('a');
@@ -164,7 +188,7 @@ const POPUP_MIN_HEIGHT = 200;
 const POPUP_MAX_HEIGHT = 600;
 
 function hasOpenOverlay(): boolean {
-  return !!document.querySelector('.drawer') || !!decodedPanel?.classList.contains('open');
+  return !!document.querySelector('.drawer') || !!decodedPanel?.classList.contains('open') || changeLogOpen;
 }
 
 function updatePopupHeight(): void {
@@ -479,9 +503,59 @@ function getSelectedCookies(): CookieRecord[] {
   return allCookies.filter((c) => selectedKeys.has(cookieKey(c)));
 }
 
+// ---- Change log ----
+async function onOpenChangeLog(): Promise<void> {
+  const domain = currentTabUrl ? new URL(currentTabUrl).hostname : undefined;
+  const response = await sendMessageSafe<MessageMap['cookiepeek:get-change-log']['response']>({
+    type: 'cookiepeek:get-change-log',
+    payload: { domain },
+  });
+
+  const log = response && !response.__error ? response.log : [];
+  changeLogOpen = true;
+  const panel = createChangeLogPanel(log, () => {
+    changeLogOpen = false;
+    updatePopupHeight();
+  });
+  document.body.appendChild(panel);
+  updatePopupHeight();
+}
+
+// ---- Live monitoring ----
+function setupLiveListener(): void {
+  browser.runtime.onMessage.addListener((message: any) => {
+    if (message?.type !== 'cookiepeek:cookie-changed') return;
+    const event = message.payload as CookieChangeEvent;
+
+    // Show live dot
+    const dot = document.getElementById('live-dot');
+    if (dot) dot.style.display = '';
+
+    // Append to change log if open
+    appendChangeLogEntry(event);
+
+    // Check if the change matches current tab domain
+    if (currentTabUrl) {
+      const tabDomain = new URL(currentTabUrl).hostname;
+      const cookieDomain = event.cookie.domain.startsWith('.') ? event.cookie.domain.slice(1) : event.cookie.domain;
+      if (tabDomain === cookieDomain || tabDomain.endsWith(`.${cookieDomain}`)) {
+        // Debounced refresh
+        if (liveDebounceTimer) clearTimeout(liveDebounceTimer);
+        liveDebounceTimer = setTimeout(() => {
+          void loadCookies();
+          liveDebounceTimer = null;
+        }, LIVE_UPDATE_DEBOUNCE_MS);
+
+        showToast(`Cookie ${event.type}: ${event.cookie.name}`, 'info');
+      }
+    }
+  });
+}
+
 // ---- Init ----
 initTheme();
 buildUI();
+setupLiveListener();
 void loadCookies().then(() => {
   const t1 = performance.now();
   console.log(`CookiePeek render: ${(t1 - t0).toFixed(1)}ms`);

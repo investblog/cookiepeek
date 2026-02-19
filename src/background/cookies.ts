@@ -2,7 +2,7 @@ import type { CookieRecord } from '@shared/types/cookies';
 import type { Cookies } from 'wxt/browser';
 import { browser } from 'wxt/browser';
 
-function toCookieRecord(cookie: Cookies.Cookie): CookieRecord {
+export function toCookieRecord(cookie: Cookies.Cookie): CookieRecord {
   return {
     name: cookie.name,
     value: cookie.value,

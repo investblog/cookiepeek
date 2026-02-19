@@ -1,11 +1,15 @@
-import { updateBadgeForTab } from '@background/badge';
-import { deleteCookie, deleteCookies, getCookiesForTab, setCookie } from '@background/cookies';
+import { flashBadge, updateBadgeForTab } from '@background/badge';
+import { deleteCookie, deleteCookies, getCookiesForTab, setCookie, toCookieRecord } from '@background/cookies';
 import { decodeValue } from '@background/decoder';
 import { formatCookies } from '@background/formats';
 import { importCookies } from '@background/importer';
+import { MAX_CHANGE_LOG } from '@shared/constants';
+import type { CookieChangeEvent } from '@shared/types/cookies';
 import { browser } from 'wxt/browser';
 
 export default defineBackground(() => {
+  const changeLog: CookieChangeEvent[] = [];
+
   browser.tabs.onActivated.addListener(async ({ tabId }) => {
     await updateBadgeForTab(tabId);
   });
@@ -16,14 +20,33 @@ export default defineBackground(() => {
     }
   });
 
-  browser.cookies.onChanged.addListener(async () => {
+  browser.cookies.onChanged.addListener(async (changeInfo) => {
+    const type = changeInfo.removed ? 'removed' : 'changed';
+    const cookie = toCookieRecord(changeInfo.cookie);
+    const event: CookieChangeEvent = { type, cookie, timestamp: Date.now() };
+
+    changeLog.push(event);
+    if (changeLog.length > MAX_CHANGE_LOG) {
+      changeLog.splice(0, changeLog.length - MAX_CHANGE_LOG);
+    }
+
     try {
       const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
       if (tab?.id) {
         await updateBadgeForTab(tab.id);
+        void flashBadge(tab.id);
       }
     } catch {
       // Tab may not be available
+    }
+
+    try {
+      await browser.runtime.sendMessage({
+        type: 'cookiepeek:cookie-changed',
+        payload: event,
+      });
+    } catch {
+      // Popup may be closed
     }
   });
 
@@ -76,6 +99,15 @@ export default defineBackground(() => {
         .then((result: { imported: number; errors: string[] }) => sendResponse(result))
         .catch((err: unknown) => sendResponse({ imported: 0, errors: [(err as Error).message] }));
       return true;
+    }
+
+    if (type === 'cookiepeek:get-change-log') {
+      const domain = payload?.domain as string | undefined;
+      const filtered = domain
+        ? changeLog.filter((e) => e.cookie.domain === domain || e.cookie.domain === `.${domain}`)
+        : changeLog;
+      sendResponse({ log: filtered });
+      return false;
     }
 
     sendResponse({ error: 'Unknown message type' });
