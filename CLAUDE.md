@@ -40,6 +40,7 @@ src/
     types/cookies.ts           # CookieRecord, DecodedValue, ExportFormat types
     messaging/                 # Type-safe message protocol (defineExtensionMessaging)
     theme.ts                   # Dark/light/system theme (from redirect-inspector)
+    store-links.ts             # Per-browser store URLs for rating links
     constants.ts               # Limits, defaults, format specs
 ```
 
@@ -130,6 +131,14 @@ Live cookie changes flash table rows green (added/changed) or red (removed) for 
 - **CSS keyframes** `flash-added` / `flash-removed` — animate from `--flash-added-bg` / `--flash-removed-bg` to transparent
 - **Theme tokens** in `theme.css` — dark theme uses `rgba(success, 0.28)` / `rgba(danger, 0.28)` for visibility; light theme uses `0.15` opacity
 - **`ROW_FLASH_MS = 1500`** constant matches the CSS animation duration; class removed via `setTimeout`
+
+## Store Rating Links (v1.2)
+
+Per-browser store icons in the popup footer — each build links to its own store listing for ratings/reviews.
+
+- **`src/shared/store-links.ts`** — `STORES` record keyed by browser name, `getStoreInfo()` returns URL/icon/label based on `import.meta.env.BROWSER` (WXT compile-time constant). Returns `null` when URL is empty (Opera — no store listing yet)
+- **`src/public/icons/{chrome,edge,mozilla,opera}.svg`** — 24×24 browser brand icons (from fastweb reference project)
+- **Popup integration** — `buildUI()` in `main.ts` appends an `<a><img></a>` to `footerLinks` after the GitHub icon. Gated by `getStoreInfo() !== null`
 
 ## Build Targets
 
