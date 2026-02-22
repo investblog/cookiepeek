@@ -60,6 +60,14 @@ export default defineConfig({
 
     ...(browser === 'opera' && {
       minimum_chrome_version: '116',
+      sidebar_action: {
+        default_panel: 'popup.html?sidepanel=1',
+        default_title: '__MSG_EXTENSION_NAME__',
+        default_icon: {
+          16: 'icons/16.png',
+          32: 'icons/32.png',
+        },
+      },
     }),
 
     ...(browser === 'firefox' && {
