@@ -1,6 +1,7 @@
 import { LIVE_UPDATE_DEBOUNCE_MS, ROW_FLASH_MS } from '@shared/constants';
 import type { MessageMap } from '@shared/messaging';
 import { sendMessageSafe } from '@shared/messaging';
+import { getStoreInfo } from '@shared/store-links';
 import { getTheme, initTheme, toggleTheme } from '@shared/theme';
 import type {
   CookieChangeEvent,
@@ -165,6 +166,22 @@ function buildUI(): void {
   ghLink.title = 'Feedback';
   ghLink.appendChild(svgGitHub(14));
   footerLinks.appendChild(ghLink);
+  const storeInfo = getStoreInfo();
+  if (storeInfo) {
+    const storeLink = document.createElement('a');
+    storeLink.href = storeInfo.url;
+    storeLink.target = '_blank';
+    storeLink.rel = 'noopener';
+    storeLink.className = 'popup__footer-link';
+    storeLink.title = `Rate on ${storeInfo.label}`;
+    const storeIcon = document.createElement('img');
+    storeIcon.src = storeInfo.icon;
+    storeIcon.width = 14;
+    storeIcon.height = 14;
+    storeIcon.alt = '';
+    storeLink.appendChild(storeIcon);
+    footerLinks.appendChild(storeLink);
+  }
   footer.appendChild(footerLinks);
 
   const sponsor = document.createElement('a');
