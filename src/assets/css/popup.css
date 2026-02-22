@@ -18,6 +18,11 @@ body {
   overflow: hidden;
 }
 
+body.sidepanel {
+  width: 100%;
+  height: 100vh;
+}
+
 /* ---- Layout ---- */
 
 .popup {
@@ -939,4 +944,24 @@ a.popup__title:hover {
   text-align: center;
   color: var(--text-subtle);
   padding: var(--space-4);
+}
+
+/* ---- Row flash highlights (live changes) ---- */
+
+@keyframes flash-added {
+  from { background: var(--flash-added-bg); }
+  to   { background: transparent; }
+}
+
+@keyframes flash-removed {
+  from { background: var(--flash-removed-bg); }
+  to   { background: transparent; }
+}
+
+.cookie-row--flash-added td {
+  animation: flash-added 1.5s ease-out;
+}
+
+.cookie-row--flash-removed td {
+  animation: flash-removed 1.5s ease-out;
 }

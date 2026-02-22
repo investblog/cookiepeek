@@ -124,6 +124,9 @@
   --success-bg: #042C1C;
   --warning-bg: #38240A;
 
+  --flash-added-bg: rgba(24, 194, 122, 0.28);
+  --flash-removed-bg: rgba(255, 79, 110, 0.28);
+
   --notice-success-bg: color-mix(in srgb, var(--ok) 22%, var(--bg-soft));
   --notice-success-fg: color-mix(in srgb, var(--ok) 85%, #ffffff 15%);
   --notice-error-bg: color-mix(in srgb, var(--danger) 26%, var(--bg-soft));
@@ -169,6 +172,9 @@
   --danger-bg: #FDE6EA;
   --success-bg: #E0F7EE;
   --warning-bg: #FFF1D8;
+
+  --flash-added-bg: rgba(24, 194, 122, 0.15);
+  --flash-removed-bg: rgba(255, 79, 110, 0.15);
 
   --notice-success-bg: color-mix(in srgb, var(--ok) 15%, var(--bg-soft));
   --notice-success-fg: color-mix(in srgb, var(--ok) 70%, #0f1a0f 30%);
@@ -217,6 +223,9 @@
     --success-bg: #042C1C;
     --warning-bg: #38240A;
 
+    --flash-added-bg: rgba(24, 194, 122, 0.28);
+    --flash-removed-bg: rgba(255, 79, 110, 0.28);
+
     --notice-success-bg: color-mix(in srgb, var(--ok) 22%, var(--bg-soft));
     --notice-success-fg: color-mix(in srgb, var(--ok) 85%, #ffffff 15%);
     --notice-error-bg: color-mix(in srgb, var(--danger) 26%, var(--bg-soft));
@@ -263,6 +272,9 @@
     --danger-bg: #FDE6EA;
     --success-bg: #E0F7EE;
     --warning-bg: #FFF1D8;
+
+    --flash-added-bg: rgba(24, 194, 122, 0.15);
+    --flash-removed-bg: rgba(255, 79, 110, 0.15);
 
     --notice-success-bg: color-mix(in srgb, var(--ok) 15%, var(--bg-soft));
     --notice-success-fg: color-mix(in srgb, var(--ok) 70%, #0f1a0f 30%);

@@ -9,3 +9,4 @@ export const MAX_CHANGE_LOG = 50;
 export const LIVE_UPDATE_DEBOUNCE_MS = 300;
 export const BADGE_FLASH_COLOR = '#f59e0b';
 export const BADGE_FLASH_MS = 600;
+export const ROW_FLASH_MS = 1500;

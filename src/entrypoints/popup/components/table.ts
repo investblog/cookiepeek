@@ -69,6 +69,7 @@ export function createTable(
   for (const cookie of cookies) {
     const key = cookieKey(cookie);
     const tr = el('tr');
+    tr.setAttribute('data-cookie-key', key);
     if (selectedKeys.has(key)) tr.classList.add('selected');
 
     // Checkbox

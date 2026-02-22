@@ -1,9 +1,10 @@
-import { LIVE_UPDATE_DEBOUNCE_MS } from '@shared/constants';
+import { LIVE_UPDATE_DEBOUNCE_MS, ROW_FLASH_MS } from '@shared/constants';
 import type { MessageMap } from '@shared/messaging';
 import { sendMessageSafe } from '@shared/messaging';
 import { getTheme, initTheme, toggleTheme } from '@shared/theme';
 import type {
   CookieChangeEvent,
+  CookieChangeType,
   CookieRecord,
   DecodedValue,
   DecodeMode,
@@ -43,10 +44,16 @@ let searchQuery = '';
 
 const t0 = performance.now();
 const app = document.getElementById('app')!;
+const isSidepanel = new URLSearchParams(window.location.search).has('sidepanel');
 
 // ---- Live monitoring ----
 let liveDebounceTimer: ReturnType<typeof setTimeout> | null = null;
 let changeLogOpen = false;
+const pendingHighlights = new Map<string, CookieChangeType>();
+
+function highlightCookie(key: string, type: CookieChangeType): void {
+  pendingHighlights.set(key, type);
+}
 
 // ---- Decoded panel (persistent, slide in/out) ----
 let decodedPanel: HTMLElement | null = null;
@@ -68,6 +75,13 @@ function buildUI(): void {
   header.appendChild(titleLink);
 
   const headerActions = el('div', 'popup__header-actions');
+  if (!isSidepanel && ((browser as any).sidePanel || (browser as any).sidebarAction)) {
+    const pinBtn = el('button', 'theme-toggle');
+    pinBtn.title = 'Pin to side panel';
+    pinBtn.appendChild(svgIcon(ICONS.pin, 16));
+    pinBtn.addEventListener('click', onPinToSidePanel);
+    headerActions.appendChild(pinBtn);
+  }
   const logBtn = el('button', 'theme-toggle');
   logBtn.title = 'Change log';
   logBtn.appendChild(svgIcon(ICONS.clock, 16));
@@ -192,6 +206,10 @@ function hasOpenOverlay(): boolean {
 }
 
 function updatePopupHeight(): void {
+  if (isSidepanel) {
+    document.body.style.height = '100vh';
+    return;
+  }
   if (hasOpenOverlay()) {
     document.body.style.height = `${POPUP_MAX_HEIGHT}px`;
     return;
@@ -232,6 +250,19 @@ function renderTable(): void {
   updateBulkBar();
   updateFooter();
   updatePopupHeight();
+  applyPendingHighlights();
+}
+
+function applyPendingHighlights(): void {
+  if (pendingHighlights.size === 0) return;
+  for (const [key, type] of pendingHighlights) {
+    const row = document.querySelector(`tr[data-cookie-key="${CSS.escape(key)}"]`);
+    if (!row) continue;
+    const cls = type === 'removed' ? 'cookie-row--flash-removed' : 'cookie-row--flash-added';
+    row.classList.add(cls);
+    setTimeout(() => row.classList.remove(cls), ROW_FLASH_MS);
+  }
+  pendingHighlights.clear();
 }
 
 function updateBulkBar(): void {
@@ -368,6 +399,7 @@ async function onEdit(cookie: CookieRecord): Promise<void> {
       });
       if (response?.success) {
         showToast('Cookie saved', 'success');
+        highlightCookie(cookieKey(updated), 'changed');
         await loadCookies();
       } else {
         showToast(response?.error || 'Failed to save cookie', 'error');
@@ -409,6 +441,7 @@ function onAddCookie(): void {
       });
       if (response?.success) {
         showToast('Cookie added', 'success');
+        highlightCookie(cookieKey(cookie), 'changed');
         await loadCookies();
       } else {
         showToast(response?.error || 'Failed to add cookie', 'error');
@@ -521,6 +554,21 @@ async function onOpenChangeLog(): Promise<void> {
   updatePopupHeight();
 }
 
+// ---- Pin to side panel ----
+async function onPinToSidePanel(): Promise<void> {
+  // Chrome / Edge — Side Panel API
+  const sp = (browser as any).sidePanel;
+  if (sp?.open) {
+    const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+    if (tab?.id) sp.open({ tabId: tab.id }).catch(() => {});
+  } else {
+    // Firefox — Sidebar Action API
+    const sa = (browser as any).sidebarAction;
+    if (sa?.open) sa.open().catch(() => {});
+  }
+  window.close();
+}
+
 // ---- Live monitoring ----
 function setupLiveListener(): void {
   browser.runtime.onMessage.addListener((message: any) => {
@@ -539,6 +587,8 @@ function setupLiveListener(): void {
       const tabDomain = new URL(currentTabUrl).hostname;
       const cookieDomain = event.cookie.domain.startsWith('.') ? event.cookie.domain.slice(1) : event.cookie.domain;
       if (tabDomain === cookieDomain || tabDomain.endsWith(`.${cookieDomain}`)) {
+        highlightCookie(`${event.cookie.name}|${event.cookie.domain}|${event.cookie.path}`, event.type);
+
         // Debounced refresh
         if (liveDebounceTimer) clearTimeout(liveDebounceTimer);
         liveDebounceTimer = setTimeout(() => {
@@ -553,6 +603,7 @@ function setupLiveListener(): void {
 }
 
 // ---- Init ----
+if (isSidepanel) document.body.classList.add('sidepanel');
 initTheme();
 buildUI();
 setupLiveListener();

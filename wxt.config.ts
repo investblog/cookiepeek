@@ -18,13 +18,24 @@ export default defineConfig({
   manifest: ({ browser }) => ({
     name: '__MSG_EXTENSION_NAME__',
     description: '__MSG_EXTENSION_DESCRIPTION__',
-    version: '1.0.4',
+    version: '1.2.0',
     author: 'CookiePeek <support@cookiepeek.com>',
     homepage_url: 'https://cookiepeek.com',
     default_locale: 'en',
 
-    permissions: ['cookies', 'activeTab'],
+    permissions: [
+      'cookies',
+      'activeTab',
+      ...(browser !== 'firefox' && browser !== 'opera' ? (['sidePanel'] as const) : []),
+    ],
     host_permissions: ['<all_urls>'],
+
+    ...(browser !== 'firefox' &&
+      browser !== 'opera' && {
+        side_panel: {
+          default_path: 'popup.html?sidepanel=1',
+        },
+      }),
 
     content_security_policy: {
       extension_pages: "script-src 'self'; object-src 'self'",
@@ -59,6 +70,14 @@ export default defineConfig({
           data_collection_permissions: {
             required: ['none'],
           },
+        },
+      },
+      sidebar_action: {
+        default_panel: 'popup.html?sidepanel=1',
+        default_title: '__MSG_EXTENSION_NAME__',
+        default_icon: {
+          16: 'icons/16.png',
+          32: 'icons/32.png',
         },
       },
     }),
