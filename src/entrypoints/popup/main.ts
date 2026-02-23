@@ -1,7 +1,6 @@
 import { LIVE_UPDATE_DEBOUNCE_MS, ROW_FLASH_MS } from '@shared/constants';
 import type { MessageMap } from '@shared/messaging';
 import { sendMessageSafe } from '@shared/messaging';
-import { getStoreInfo } from '@shared/store-links';
 import { getTheme, initTheme, toggleTheme } from '@shared/theme';
 import type {
   CookieChangeEvent,
@@ -21,18 +20,7 @@ import { showImportDialog } from './components/import-dialog';
 import { createSearch, filterCookies } from './components/search';
 import { cookieKey, createTable, sortCookies } from './components/table';
 import { createBulkBar, createToolbar } from './components/toolbar';
-import {
-  copyToClipboard,
-  downloadFile,
-  el,
-  ICONS,
-  showToast,
-  svg301Logo,
-  svgBrandIcon,
-  svgGitHub,
-  svgIcon,
-  svgTelegram,
-} from './helpers';
+import { copyToClipboard, downloadFile, el, ICONS, showToast, svgBrandIcon, svgIcon } from './helpers';
 
 // ---- State ----
 let allCookies: CookieRecord[] = [];
@@ -66,14 +54,10 @@ function buildUI(): void {
 
   // Header
   const header = el('div', 'popup__header');
-  const titleLink = document.createElement('a');
-  titleLink.href = 'https://301.st/?utm_source=cookiepeek&utm_medium=extension&utm_campaign=popup';
-  titleLink.target = '_blank';
-  titleLink.rel = 'noopener';
-  titleLink.className = 'popup__title';
-  titleLink.appendChild(svgBrandIcon(18));
-  titleLink.appendChild(document.createTextNode('CookiePeek'));
-  header.appendChild(titleLink);
+  const title = el('div', 'popup__title');
+  title.appendChild(svgBrandIcon(18));
+  title.appendChild(document.createTextNode('CookiePeek'));
+  header.appendChild(title);
 
   const headerActions = el('div', 'popup__header-actions');
   if (!isSidepanel && ((browser as any).sidePanel || (browser as any).sidebarAction)) {
@@ -148,50 +132,6 @@ function buildUI(): void {
   footerCount.id = 'footer-count';
   footerCountWrap.appendChild(footerCount);
   footer.appendChild(footerCountWrap);
-
-  const footerLinks = el('div', 'popup__footer-links');
-  const tgLink = document.createElement('a');
-  tgLink.href = 'https://t.me/cookiepeek';
-  tgLink.target = '_blank';
-  tgLink.rel = 'noopener';
-  tgLink.className = 'popup__footer-link';
-  tgLink.title = 'Telegram';
-  tgLink.appendChild(svgTelegram(14));
-  footerLinks.appendChild(tgLink);
-  const ghLink = document.createElement('a');
-  ghLink.href = 'https://github.com/investblog/cookiepeek/issues';
-  ghLink.target = '_blank';
-  ghLink.rel = 'noopener';
-  ghLink.className = 'popup__footer-link';
-  ghLink.title = 'Feedback';
-  ghLink.appendChild(svgGitHub(14));
-  footerLinks.appendChild(ghLink);
-  const storeInfo = getStoreInfo();
-  if (storeInfo) {
-    const storeLink = document.createElement('a');
-    storeLink.href = storeInfo.url;
-    storeLink.target = '_blank';
-    storeLink.rel = 'noopener';
-    storeLink.className = 'popup__footer-link';
-    storeLink.title = `Rate on ${storeInfo.label}`;
-    const storeIcon = document.createElement('img');
-    storeIcon.src = storeInfo.icon;
-    storeIcon.width = 14;
-    storeIcon.height = 14;
-    storeIcon.alt = '';
-    storeLink.appendChild(storeIcon);
-    footerLinks.appendChild(storeLink);
-  }
-  footer.appendChild(footerLinks);
-
-  const sponsor = document.createElement('a');
-  sponsor.href = 'https://301.st/?utm_source=cookiepeek&utm_medium=extension&utm_campaign=footer';
-  sponsor.target = '_blank';
-  sponsor.rel = 'noopener';
-  sponsor.className = 'popup__sponsor';
-  sponsor.appendChild(document.createTextNode('Sponsored by '));
-  sponsor.appendChild(svg301Logo(14));
-  footer.appendChild(sponsor);
   app.appendChild(footer);
 
   // Focus search on "/" key

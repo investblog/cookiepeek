@@ -28,7 +28,8 @@ export default defineConfig({
       'activeTab',
       ...(browser !== 'firefox' && browser !== 'opera' ? (['sidePanel'] as const) : []),
     ],
-    host_permissions: ['<all_urls>'],
+    // Limit cookie access to standard web origins (exclude internal browser schemes).
+    host_permissions: ['http://*/*', 'https://*/*'],
 
     ...(browser !== 'firefox' &&
       browser !== 'opera' && {

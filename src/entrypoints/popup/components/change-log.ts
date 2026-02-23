@@ -1,5 +1,5 @@
 import type { CookieChangeEvent } from '@shared/types/cookies';
-import { el } from '../helpers';
+import { el, ICONS, svgIcon } from '../helpers';
 
 function formatTime(timestamp: number): string {
   const d = new Date(timestamp);
@@ -45,8 +45,7 @@ export function createChangeLogPanel(initialLog: CookieChangeEvent[], onClose: (
   const header = el('div', 'drawer__header');
   header.appendChild(el('div', 'drawer__title', 'Change Log'));
   const closeBtn = el('button', 'btn btn--ghost btn--icon');
-  closeBtn.innerHTML =
-    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>';
+  closeBtn.appendChild(svgIcon(ICONS.x, 16));
   closeBtn.addEventListener('click', () => {
     drawer.remove();
     onClose();
