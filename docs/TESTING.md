@@ -5,7 +5,7 @@
 1. `npm run check` — typecheck + lint + 42 unit tests
 2. `npm run build && npm run build:firefox` — both succeed
 3. Popup JS < 50 KB (`dist/chrome-mv3/chunks/popup-*.js`)
-4. Manifest: permissions = `cookies`, `activeTab`, `storage` only; no remote code
+4. Manifest: permissions = `cookies`, `activeTab` (+ `sidePanel` where supported); host permissions limited to `http://*/*` + `https://*/*`; no remote code
 5. Locale parity: `en/messages.json` and `ru/messages.json` have same keys
 6. `npm run zip:all` — zip artifacts created
 7. `npm audit` — no known vulnerabilities
@@ -18,7 +18,7 @@
 | No cookie persistence | `storage.local.set` with cookie data | Only user prefs (theme) |
 | No eval/dynamic code | `eval(`, `Function(`, `innerHTML =` with user input | Zero hits |
 | No data exfil | Export destinations | Clipboard or local file only |
-| Minimal permissions | `manifest.json` permissions array | 3 permissions, `<all_urls>` host |
+| Minimal permissions | `manifest.json` permissions array | `cookies`, `activeTab`, optional `sidePanel`; host permissions limited to `http://*/*` + `https://*/*` |
 | CSP | `content_security_policy` | Blocks `unsafe-eval`, `unsafe-inline`, external |
 
 ## Manual Test: Popup

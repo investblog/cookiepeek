@@ -61,7 +61,7 @@ npm run check          # Typecheck + lint + test
 
 ## Privacy
 
-CookiePeek makes zero network requests. No analytics, no telemetry, no remote code. Cookie data is read on demand and never persisted to extension storage. The only local data is your theme preference.
+CookiePeek makes no automatic/background network requests. No analytics, no telemetry, no remote code. Cookie data is read on demand and never persisted to extension storage. The only local data is your theme preference.
 
 Full privacy policy: [PRIVACY.md](docs/PRIVACY.md)
 

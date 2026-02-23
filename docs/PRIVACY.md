@@ -1,6 +1,6 @@
 # Privacy Policy — CookiePeek
 
-**Last updated:** February 17, 2026
+**Last updated:** February 23, 2026
 
 ## Summary
 
@@ -28,7 +28,9 @@ When you close the popup, cookie data is discarded from memory.
 
 ## Network Requests
 
-CookiePeek makes **zero network requests**. There are no analytics endpoints, no CDN resources, no remote code, and no outbound connections of any kind.
+CookiePeek makes **no automatic/background network requests**. There are no analytics endpoints, no CDN resources, and no remote code.
+
+If you click external links in the UI (for example store/review/support links), your browser will open those pages by explicit user action.
 
 ## Permissions
 
@@ -36,7 +38,7 @@ CookiePeek makes **zero network requests**. There are no analytics endpoints, no
 |------------|---------|
 | `cookies` | Read, create, edit, and delete cookies via the browser cookies API |
 | `activeTab` | Get the URL of the current tab to query its cookies |
-| `<all_urls>` | Required by the cookies API to access cookies for any site |
+| `http://*/*`, `https://*/*` | Required by the cookies API to access cookies on standard web origins |
 
 ## Local Storage
 

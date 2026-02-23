@@ -1,8 +1,8 @@
 import type { CookieRecord } from '@shared/types/cookies';
-import type { Cookies } from 'wxt/browser';
+import type { Browser } from 'wxt/browser';
 import { browser } from 'wxt/browser';
 
-export function toCookieRecord(cookie: Cookies.Cookie): CookieRecord {
+export function toCookieRecord(cookie: Browser.cookies.Cookie): CookieRecord {
   return {
     name: cookie.name,
     value: cookie.value,
@@ -34,7 +34,7 @@ export async function getCookiesForTab(tabId: number): Promise<CookieRecord[]> {
 }
 
 export async function setCookie(cookie: CookieRecord, url: string): Promise<void> {
-  const details: Cookies.SetDetailsType = {
+  const details: Browser.cookies.SetDetails = {
     url,
     name: cookie.name,
     value: cookie.value,
@@ -57,7 +57,7 @@ export async function setCookie(cookie: CookieRecord, url: string): Promise<void
 }
 
 export async function deleteCookie(name: string, url: string, storeId?: string): Promise<void> {
-  const details: Cookies.RemoveDetailsType = { url, name };
+  const details: Browser.cookies.CookieDetails = { url, name };
   if (storeId) {
     details.storeId = storeId;
   }

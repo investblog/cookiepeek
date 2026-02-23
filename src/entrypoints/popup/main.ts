@@ -67,7 +67,7 @@ function buildUI(): void {
   // Header
   const header = el('div', 'popup__header');
   const titleLink = document.createElement('a');
-  titleLink.href = 'https://301.st/?utm_source=cookiepeek&utm_medium=extension&utm_campaign=popup';
+  titleLink.href = 'https://301.st/';
   titleLink.target = '_blank';
   titleLink.rel = 'noopener';
   titleLink.className = 'popup__title';
@@ -185,7 +185,7 @@ function buildUI(): void {
   footer.appendChild(footerLinks);
 
   const sponsor = document.createElement('a');
-  sponsor.href = 'https://301.st/?utm_source=cookiepeek&utm_medium=extension&utm_campaign=footer';
+  sponsor.href = 'https://301.st/';
   sponsor.target = '_blank';
   sponsor.rel = 'noopener';
   sponsor.className = 'popup__sponsor';
