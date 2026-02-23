@@ -28,7 +28,9 @@ When you close the popup, cookie data is discarded from memory.
 
 ## Network Requests
 
-CookiePeek makes **zero network requests**. There are no analytics endpoints, no CDN resources, no remote code, and no outbound connections.
+CookiePeek makes **no automatic/background network requests**. There are no analytics endpoints, no CDN resources, and no remote code.
+
+If you click external links in the UI (for example store/review/support links), your browser will open those pages by explicit user action.
 
 ## Permissions
 

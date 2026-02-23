@@ -16,7 +16,7 @@ Cookie viewer/editor/exporter extension for developers and multi-account operato
 |---------|-----------|-------------|
 | Inline decode (JWT/Base64/URL) | Auto-detect + manual override | Copy to jwt.io manually |
 | Anti-detect export | Dedicated format | Generic JSON only |
-| Zero telemetry | No network requests, open-source | Ads, closed-source |
+| Zero telemetry | No automatic/background network requests, open-source | Ads, closed-source |
 | Full cookie access | HTTPOnly, Secure, SameSite | Incomplete in many tools |
 | Instant popup | Vanilla DOM, <100ms render | Framework overhead |
 
@@ -82,4 +82,4 @@ Auto-detection priority: JWT > Base64 > URL-encoded > raw.
 - Popup JS: < 50 KB
 - Popup render: < 100 ms
 - Dynamic popup height: 200–600 px based on cookie count
-- Zero network requests, zero dependencies at runtime
+- No automatic/background network requests, zero dependencies at runtime
