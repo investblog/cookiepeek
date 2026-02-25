@@ -93,7 +93,11 @@ export function createToolbar(callbacks: ToolbarCallbacks): HTMLElement {
   return toolbar;
 }
 
-export function createBulkBar(count: number, onDelete: () => void, onExport: () => void): HTMLElement {
+export function createBulkBar(
+  count: number,
+  onDelete: () => void,
+  onExport: (target: ExportTarget) => void,
+): HTMLElement {
   const bar = el('div', 'bulk-bar');
   bar.appendChild(el('span', 'bulk-bar__count', `${count} selected`));
 
@@ -101,9 +105,21 @@ export function createBulkBar(count: number, onDelete: () => void, onExport: () 
   delBtn.addEventListener('click', onDelete);
   bar.appendChild(delBtn);
 
-  const expBtn = el('button', 'btn btn--secondary btn--sm', 'Export Selected');
-  expBtn.addEventListener('click', onExport);
-  bar.appendChild(expBtn);
+  const expLabel = el('span', 'bulk-bar__label', 'Export');
+
+  const clipBtn = el('button', 'btn btn--ghost btn--sm btn--icon');
+  clipBtn.title = 'Copy to clipboard';
+  clipBtn.appendChild(svgIcon(ICONS.copy, 14));
+  clipBtn.addEventListener('click', () => onExport('clipboard'));
+
+  const fileBtn = el('button', 'btn btn--ghost btn--sm btn--icon');
+  fileBtn.title = 'Save as file';
+  fileBtn.appendChild(svgIcon(ICONS.download, 14));
+  fileBtn.addEventListener('click', () => onExport('file'));
+
+  bar.appendChild(expLabel);
+  bar.appendChild(clipBtn);
+  bar.appendChild(fileBtn);
 
   return bar;
 }

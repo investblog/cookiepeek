@@ -286,7 +286,7 @@ function updateBulkBar(): void {
   const slot = document.getElementById('bulk-bar-slot')!;
   slot.innerHTML = '';
   if (selectedKeys.size > 0) {
-    const bar = createBulkBar(selectedKeys.size, onBulkDelete, () => onExportSelected());
+    const bar = createBulkBar(selectedKeys.size, onBulkDelete, (target) => onExportSelected(target));
     slot.appendChild(bar);
   }
 }
@@ -475,8 +475,8 @@ async function onExport(format: ExportFormat, target: 'clipboard' | 'file'): Pro
   await doExport(cookiesToExport, format, target);
 }
 
-async function onExportSelected(): Promise<void> {
-  await doExport(getSelectedCookies(), 'json', 'clipboard');
+async function onExportSelected(target: 'clipboard' | 'file'): Promise<void> {
+  await doExport(getSelectedCookies(), 'json', target);
 }
 
 async function doExport(cookies: CookieRecord[], format: ExportFormat, target: 'clipboard' | 'file'): Promise<void> {

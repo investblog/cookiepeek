@@ -735,8 +735,23 @@ a.popup__title:hover {
 }
 
 .bulk-bar__count {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  background: color-mix(in srgb, var(--primary) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--primary) 40%, transparent);
   font-weight: var(--fw-semibold);
+  font-size: 11px;
+  line-height: 1;
   color: var(--primary);
+  white-space: nowrap;
+}
+
+.bulk-bar__label {
+  font-weight: var(--fw-medium);
+  color: var(--text-muted);
+  margin-left: auto;
 }
 
 /* ---- Footer ---- */
