@@ -77,6 +77,18 @@
   "EXPORT_SUCCESS": {
     "message": "Скопировано в буфер обмена"
   },
+  "EXPORT_COPY_CLIPBOARD": {
+    "message": "Скопировать в буфер"
+  },
+  "EXPORT_SAVE_FILE": {
+    "message": "Сохранить файлом"
+  },
+  "EXPORT_DOWNLOAD_SUCCESS": {
+    "message": "Скачано $COUNT$ cookie",
+    "placeholders": {
+      "COUNT": { "content": "$1" }
+    }
+  },
   "NO_COOKIES": {
     "message": "Cookie для этой страницы не найдены"
   },

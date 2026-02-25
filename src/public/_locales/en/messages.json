@@ -77,6 +77,18 @@
   "EXPORT_SUCCESS": {
     "message": "Copied to clipboard"
   },
+  "EXPORT_COPY_CLIPBOARD": {
+    "message": "Copy to clipboard"
+  },
+  "EXPORT_SAVE_FILE": {
+    "message": "Save as file"
+  },
+  "EXPORT_DOWNLOAD_SUCCESS": {
+    "message": "Downloaded $COUNT$ cookies",
+    "placeholders": {
+      "COUNT": { "content": "$1" }
+    }
+  },
   "NO_COOKIES": {
     "message": "No cookies found for this page"
   },

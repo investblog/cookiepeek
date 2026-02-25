@@ -470,30 +470,36 @@ function onAddCookie(): void {
   updatePopupHeight();
 }
 
-async function onExport(format: ExportFormat): Promise<void> {
+async function onExport(format: ExportFormat, target: 'clipboard' | 'file'): Promise<void> {
   const cookiesToExport = selectedKeys.size > 0 ? getSelectedCookies() : allCookies;
-  await doExport(cookiesToExport, format);
+  await doExport(cookiesToExport, format, target);
 }
 
 async function onExportSelected(): Promise<void> {
-  await doExport(getSelectedCookies(), 'json');
+  await doExport(getSelectedCookies(), 'json', 'clipboard');
 }
 
-async function doExport(cookies: CookieRecord[], format: ExportFormat): Promise<void> {
+async function doExport(cookies: CookieRecord[], format: ExportFormat, target: 'clipboard' | 'file'): Promise<void> {
   const response = await sendMessageSafe<MessageMap['cookiepeek:export-cookies']['response']>({
     type: 'cookiepeek:export-cookies',
     payload: { cookies, format },
   });
 
   if (response?.output) {
-    const ok = await copyToClipboard(response.output);
-    if (ok) {
-      showToast(`Exported ${cookies.length} cookies to clipboard`, 'success');
-    } else {
-      // Fallback to file download
+    if (target === 'file') {
       const domain = currentTabUrl ? new URL(currentTabUrl).hostname : 'cookies';
       downloadFile(response.output, detectExportFilename(format, domain), detectExportMime(format));
       showToast(`Downloaded ${cookies.length} cookies`, 'success');
+    } else {
+      const ok = await copyToClipboard(response.output);
+      if (ok) {
+        showToast(`Exported ${cookies.length} cookies to clipboard`, 'success');
+      } else {
+        // Fallback to file download
+        const domain = currentTabUrl ? new URL(currentTabUrl).hostname : 'cookies';
+        downloadFile(response.output, detectExportFilename(format, domain), detectExportMime(format));
+        showToast(`Downloaded ${cookies.length} cookies`, 'success');
+      }
     }
   } else {
     showToast(response?.error || 'Export failed', 'error');

@@ -399,16 +399,17 @@ a.popup__title:hover {
 }
 
 .dropdown__item {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
   width: 100%;
-  padding: var(--space-1) var(--space-3);
+  padding: var(--space-1) var(--space-2) var(--space-1) var(--space-3);
   background: none;
   border: none;
   color: var(--text);
   font-size: var(--fs-sm);
   font-family: var(--font-sans);
   text-align: left;
-  cursor: pointer;
   transition: background var(--transition-fast);
 }
 
@@ -416,10 +417,34 @@ a.popup__title:hover {
   background: color-mix(in srgb, var(--primary) 8%, transparent);
 }
 
-.dropdown__item:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  pointer-events: none;
+.dropdown__label {
+  flex: 1;
+  min-width: 0;
+}
+
+.dropdown__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.dropdown__action:hover {
+  background: color-mix(in srgb, var(--primary) 15%, transparent);
+  color: var(--text);
+}
+
+.dropdown__action:active {
+  background: color-mix(in srgb, var(--primary) 25%, transparent);
 }
 
 .dropdown__divider {
