@@ -140,14 +140,50 @@ Per-browser store icons in the popup footer — each build links to its own stor
 - **`src/public/icons/{chrome,edge,mozilla,opera}.svg`** — 24×24 browser brand icons (from fastweb reference project)
 - **Popup integration** — `buildUI()` in `main.ts` appends an `<a><img></a>` to `footerLinks` after the GitHub icon. Gated by `getStoreInfo() !== null`
 
+## Export to File (v1.3)
+
+Each export format in the dropdown has two action icons: clipboard (copy) and download (save as file). Bulk bar "Export Selected" also has dual actions.
+
+- **`ExportTarget`** type (`'clipboard' | 'file'`) in `toolbar.ts` — passed through `onExport` callback
+- **`doExport(cookies, format, target)`** in `main.ts` — `'file'` calls `downloadFile()` directly, `'clipboard'` copies with file-download fallback
+- **`.dropdown__item`** is now a flex row: `<span.dropdown__label>` + two `<button.dropdown__action>` icon buttons
+- **`.bulk-bar__count`** — pill badge with `--r-pill` radius and `--primary` border (redirect-inspector pattern)
+
+## Responsive Table / Firefox Mobile (v1.3)
+
+Column priority system (from 301-ui) with CSS container queries for progressive column hiding.
+
+### Column priorities
+
+| Priority | Columns | Hidden at |
+|----------|---------|-----------|
+| critical | checkbox, name, value, actions | Never |
+| high | domain, flags | < 480px container |
+| medium | path, expires | < 560px container |
+
+### Key implementation details
+
+- **`data-priority`** attribute on every `<th>` and `<td>` — set in `table.ts`
+- **Container queries** on `.popup__table-wrap` (`container-name: table; container-type: inline-size`) — column widths redistribute when columns are hidden
+- **`@media (pointer: coarse)`** — mobile touch devices get `width: 100%; height: 100vh`. Desktop popups keep fixed `680px` width. NEVER use `max-width: 100vw` or `@media (max-width)` on body — it breaks Chrome/Firefox popup sizing (viewport starts small, circular dependency)
+- **`@media (max-width: 560px)`** — toolbar buttons become icon-only (`font-size: 0`)
+- Opera on Chromium — identical to Chrome, no separate mobile testing needed
+
+## Version Bumping
+
+Version must be updated in **three** places:
+1. `package.json` — npm version
+2. `package-lock.json` — lockfile version (two occurrences)
+3. `wxt.config.ts` — `manifest.version` (controls zip filenames and manifest)
+
 ## Build Targets
 
 | Browser | Manifest | Output dir | Notes |
 |---------|----------|------------|-------|
-| Chrome  | V3       | `.output/chrome-mv3` | Primary target |
+| Chrome  | V3       | `dist/chrome-mv3` | Primary target |
 | Edge    | V3       | Same as Chrome | Chromium, identical build |
-| Firefox | V2       | `.output/firefox-mv2` | WXT handles differences |
-| Opera   | V3       | `.output/opera-mv3` | `sidebar_action` for side panel |
+| Firefox | V2       | `dist/firefox-mv2` | WXT handles differences, also Firefox Mobile |
+| Opera   | V3       | `dist/opera-mv3` | `sidebar_action` for side panel |
 | Safari  | V3       | Deferred | `browser.cookies.getAll()` broken in Safari 18 |
 
 ## Git Workflow
@@ -156,3 +192,4 @@ Per-browser store icons in the popup footer — each build links to its own stor
 - Commits: conventional commits (`feat:`, `fix:`, `chore:`, `docs:`)
 - Tags: `vX.Y.Z` triggers GitHub Actions release with .zip artifacts
 - Never commit `.output/`, `node_modules/`, `.env`
+- **CHANGELOG.md** — Keep a Changelog format, update on each release
