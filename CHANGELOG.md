@@ -9,6 +9,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 - **Export to file** — each export format now has separate clipboard (copy) and download (save as file) buttons ([ZennoLab forum request](https://zenno.club/discussion/threads/cookiepeek-besplatnyj-menedzher-kuk-dlja-chrome-export-cookies-txt-json-header-zero-telemetry-open-source.131631/post-872289) by **404**)
 - Dual export actions in bulk bar (Export Selected → clipboard / file icons)
 - Pill badge for selection count in bulk bar
+- **Responsive table** — column priority system with container queries for Firefox Mobile support (critical → high → medium progressive hiding)
 
 ## [1.2.0] — 2026-02-22
 
