@@ -31,6 +31,7 @@ export function createTable(
 
   // Select-all checkbox
   const thCheck = el('th', 'col-checkbox');
+  thCheck.dataset.priority = 'critical';
   const selectAll = document.createElement('input') as HTMLInputElement;
   selectAll.type = 'checkbox';
   selectAll.className = 'cookie-checkbox';
@@ -39,18 +40,19 @@ export function createTable(
   thCheck.appendChild(selectAll);
   headerRow.appendChild(thCheck);
 
-  const columns: Array<{ label: string; field: SortField | null; cls: string }> = [
-    { label: 'Name', field: 'name', cls: 'col-name' },
-    { label: 'Value', field: null, cls: 'col-value' },
-    { label: 'Domain', field: 'domain', cls: 'col-domain' },
-    { label: 'Path', field: 'path', cls: 'col-path' },
-    { label: 'Expires', field: 'expires', cls: 'col-expires' },
-    { label: 'Flags', field: null, cls: 'col-flags' },
-    { label: '', field: null, cls: 'col-actions' },
+  const columns: Array<{ label: string; field: SortField | null; cls: string; priority: string }> = [
+    { label: 'Name', field: 'name', cls: 'col-name', priority: 'critical' },
+    { label: 'Value', field: null, cls: 'col-value', priority: 'critical' },
+    { label: 'Domain', field: 'domain', cls: 'col-domain', priority: 'high' },
+    { label: 'Path', field: 'path', cls: 'col-path', priority: 'medium' },
+    { label: 'Expires', field: 'expires', cls: 'col-expires', priority: 'medium' },
+    { label: 'Flags', field: null, cls: 'col-flags', priority: 'high' },
+    { label: '', field: null, cls: 'col-actions', priority: 'critical' },
   ];
 
   for (const col of columns) {
     const th = el('th', col.cls, col.label);
+    th.dataset.priority = col.priority;
     if (col.field) {
       th.style.cursor = 'pointer';
       if (sortState.field === col.field) {
@@ -74,6 +76,7 @@ export function createTable(
 
     // Checkbox
     const tdCheck = el('td');
+    tdCheck.dataset.priority = 'critical';
     const cb = document.createElement('input') as HTMLInputElement;
     cb.type = 'checkbox';
     cb.className = 'cookie-checkbox';
@@ -84,6 +87,7 @@ export function createTable(
 
     // Name
     const tdName = el('td');
+    tdName.dataset.priority = 'critical';
     tdName.textContent =
       cookie.name.length > MAX_NAME_DISPLAY_LENGTH
         ? `${cookie.name.slice(0, MAX_NAME_DISPLAY_LENGTH)}\u2026`
@@ -93,6 +97,7 @@ export function createTable(
 
     // Value (clickable)
     const tdValue = el('td', 'cookie-value');
+    tdValue.dataset.priority = 'critical';
     tdValue.textContent =
       cookie.value.length > MAX_VALUE_PREVIEW_LENGTH
         ? `${cookie.value.slice(0, MAX_VALUE_PREVIEW_LENGTH)}\u2026`
@@ -103,18 +108,21 @@ export function createTable(
 
     // Domain
     const tdDomain = el('td');
+    tdDomain.dataset.priority = 'high';
     tdDomain.textContent = cookie.domain;
     tdDomain.title = cookie.domain;
     tr.appendChild(tdDomain);
 
     // Path
     const tdPath = el('td');
+    tdPath.dataset.priority = 'medium';
     tdPath.textContent = cookie.path;
     if (cookie.path === '/') tdPath.style.color = 'var(--text-subtle)';
     tr.appendChild(tdPath);
 
     // Expires
     const tdExpires = el('td');
+    tdExpires.dataset.priority = 'medium';
     if (cookie.expirationDate === undefined) {
       tdExpires.textContent = 'Session';
       tdExpires.className = 'expiry--session';
@@ -131,6 +139,7 @@ export function createTable(
 
     // Flags
     const tdFlags = el('td');
+    tdFlags.dataset.priority = 'high';
     const flags = el('div', 'flags');
     if (cookie.secure) flags.appendChild(el('span', 'flag flag--secure', 'S'));
     if (cookie.httpOnly) flags.appendChild(el('span', 'flag flag--httponly', 'H'));
@@ -142,6 +151,7 @@ export function createTable(
 
     // Actions
     const tdActions = el('td');
+    tdActions.dataset.priority = 'critical';
     const actions = el('div', 'row-actions');
 
     const editBtn = el('button', 'btn btn--icon btn--ghost');

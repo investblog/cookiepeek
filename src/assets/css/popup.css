@@ -15,6 +15,7 @@ body {
   background: var(--bg);
   color: var(--text);
   width: 680px;
+  max-width: 100vw;
   overflow: hidden;
 }
 
@@ -148,6 +149,8 @@ a.popup__title:hover {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
+  container-name: table;
+  container-type: inline-size;
 }
 
 .cookie-table {
@@ -1004,4 +1007,25 @@ a.popup__title:hover {
 
 .cookie-row--flash-removed td {
   animation: flash-removed 1.5s ease-out;
+}
+
+/* ---- Responsive: column priority (container queries) ---- */
+/* Priority levels:
+ * - critical: Always visible (checkbox, name, value, actions)
+ * - high:     Hidden < 560px (domain, flags)
+ * - medium:   Hidden < 480px (path, expires)
+ */
+
+@container table (max-width: 560px) {
+  th[data-priority="medium"],
+  td[data-priority="medium"] {
+    display: none;
+  }
+}
+
+@container table (max-width: 480px) {
+  th[data-priority="high"],
+  td[data-priority="high"] {
+    display: none;
+  }
 }
