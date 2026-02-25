@@ -3,7 +3,7 @@
 All notable changes to CookiePeek are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
-## [Unreleased]
+## [1.3.0] — 2026-02-25
 
 ### Added
 - **Export to file** — each export format now has separate clipboard (copy) and download (save as file) buttons ([ZennoLab forum request](https://zenno.club/discussion/threads/cookiepeek-besplatnyj-menedzher-kuk-dlja-chrome-export-cookies-txt-json-header-zero-telemetry-open-source.131631/post-872289) by **404**)
