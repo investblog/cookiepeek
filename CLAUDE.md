@@ -140,18 +140,6 @@ Per-browser store icons in the popup footer — each build links to its own stor
 - **`src/public/icons/{chrome,edge,mozilla,opera}.svg`** — 24×24 browser brand icons (from fastweb reference project)
 - **Popup integration** — `buildUI()` in `main.ts` appends an `<a><img></a>` to `footerLinks` after the GitHub icon. Gated by `getStoreInfo() !== null`
 
-## Export to File (v1.3)
-
-Save cookies directly as a file — requested on [ZennoLab forum](https://zenno.club/discussion/threads/cookiepeek-besplatnyj-menedzher-kuk-dlja-chrome-export-cookies-txt-json-header-zero-telemetry-open-source.131631/post-872289) by user **404**.
-
-Each export format row in the dropdown now has **two action icons**: clipboard (copy) and download (save as file). Bulk bar "Export Selected" also has dual actions.
-
-- **`ExportTarget`** type (`'clipboard' | 'file'`) in `toolbar.ts` — passed through `onExport` callback
-- **`doExport(cookies, format, target)`** in `main.ts` — `'file'` calls `downloadFile()` directly, `'clipboard'` copies with file-download fallback
-- **`.dropdown__action`** CSS — 24×24 icon buttons inside `.dropdown__item` flex row
-- **`.bulk-bar__count`** — pill badge styled with `--r-pill` radius and `--primary` border (redirect-inspector pattern)
-- **`.bulk-bar__label`** — "Export" text label with `margin-left: auto` pushes export actions right
-
 ## Build Targets
 
 | Browser | Manifest | Output dir | Notes |
