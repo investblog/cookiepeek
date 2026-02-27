@@ -222,8 +222,10 @@ function hasOpenOverlay(): boolean {
   return !!document.querySelector('.drawer') || !!decodedPanel?.classList.contains('open') || changeLogOpen;
 }
 
+const isMobile = window.matchMedia('(pointer: coarse)').matches;
+
 function updatePopupHeight(): void {
-  if (isSidepanel) {
+  if (isSidepanel || isMobile) {
     document.body.style.height = '100vh';
     return;
   }
