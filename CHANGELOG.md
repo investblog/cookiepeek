@@ -3,13 +3,20 @@
 All notable changes to CookiePeek are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
-## [1.3.0] — 2026-02-25
+## [1.3.0] — 2026-02-27
 
 ### Added
 - **Export to file** — each export format now has separate clipboard (copy) and download (save as file) buttons ([ZennoLab forum request](https://zenno.club/discussion/threads/cookiepeek-besplatnyj-menedzher-kuk-dlja-chrome-export-cookies-txt-json-header-zero-telemetry-open-source.131631/post-872289) by **404**)
 - Dual export actions in bulk bar (Export Selected → clipboard / file icons)
 - Pill badge for selection count in bulk bar
-- **Responsive table** — column priority system with container queries for Firefox Mobile support (critical → high → medium progressive hiding)
+- **Firefox Mobile support** — responsive layout for Firefox Android
+- **Responsive table** — column priority system with CSS container queries (critical → high → medium progressive hiding)
+- Toolbar compacts to icon-only buttons on narrow screens
+- Full-screen popup on touch devices (`pointer: coarse`) with proper height management
+
+### Fixed
+- Drawer panel fills entire screen on mobile (`max-width: 100%` on touch devices)
+- Column widths redistribute when columns are hidden (no wasted space)
 
 ## [1.2.0] — 2026-02-22
 
