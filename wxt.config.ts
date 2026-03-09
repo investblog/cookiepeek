@@ -18,7 +18,7 @@ export default defineConfig({
   manifest: ({ browser }) => ({
     name: '__MSG_EXTENSION_NAME__',
     description: '__MSG_EXTENSION_DESCRIPTION__',
-    version: '1.3.1',
+    version: '1.3.2',
     author: 'CookiePeek <support@cookiepeek.com>',
     homepage_url: 'https://cookiepeek.com',
     default_locale: 'en',

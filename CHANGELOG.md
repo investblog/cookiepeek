@@ -3,6 +3,14 @@
 All notable changes to CookiePeek are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.3.2] — 2026-03-10
+
+### Fixed
+- **ZennoPoster JSON import** — support PascalCase keys (`Name`, `Value`, `Domain`, `Expires`) from ZennoPoster / .NET cookie exports ([forum report](https://zenno.club/discussion/threads/cookiepeek-besplatnyj-menedzher-kuk-dlja-chrome-export-cookies-txt-json-header-zero-telemetry-open-source.131631/post-873083) by **Shizuku**)
+- Import now accepts ISO date strings in `Expires` field (e.g. `"2027-01-15T10:30:00+00:00"`)
+- Import auto-unwraps object wrappers like `{"cookies": [...]}`
+- Case-insensitive key matching for all cookie JSON fields
+
 ## [1.3.1] — 2026-02-27
 
 ### Added
