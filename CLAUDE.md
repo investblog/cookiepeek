@@ -35,6 +35,7 @@ src/
     cookies.ts                 # browser.cookies read/write/delete/watch
     decoder.ts                 # JWT, Base64, URL decode (auto-detect)
     formats.ts                 # Export: JSON, Netscape cookies.txt, Anti-Detect JSON
+    importer.ts                # Import: JSON (any key casing) & Netscape cookies.txt
     badge.ts                   # Cookie count badge per tab
   shared/
     types/cookies.ts           # CookieRecord, DecodedValue, ExportFormat types
@@ -77,12 +78,32 @@ Detection priority: JWT → Base64 → URL-encoded → raw text.
 - **Anti-Detect JSON**: same as JSON but ensure `expirationDate` is Unix timestamp (seconds), `sameSite` uses `"no_restriction"` not `"none"`
 - **Header string**: `name1=value1; name2=value2` (single line)
 
+## Import Logic (src/background/importer.ts)
+
+Two import formats: JSON and Netscape cookies.txt. Both return `{ imported, errors }`.
+
+### JSON import — key normalization (v1.3.2)
+
+All JSON field names are matched **case-insensitively** via `normalizeKeys()`. This ensures compatibility with:
+- **Browser-native** format: `name`, `value`, `domain`, `path`, `expirationDate`, `secure`, `httpOnly`, `sameSite`
+- **ZennoPoster / .NET** format: `Name`, `Value`, `Domain`, `Path`, `Expires`, `Secure`, `HttpOnly`
+- **Any mixed casing**: `NAME`, `DOMAIN`, etc.
+
+Expiry field aliases: `expirationDate`, `expiry`, `expires` — all recognized. Values can be Unix timestamps (number) or ISO 8601 date strings (parsed via `Date.parse()`).
+
+Object wrappers like `{"cookies": [...]}` are auto-unwrapped (first array-typed value is used).
+
+### Netscape import
+
+Standard `domain\tflag\tpath\tsecure\texpiry\tname\tvalue` tab-separated format. Comment lines (`#`) and empty lines are skipped. Values containing tabs are preserved.
+
 ## Testing Strategy
 
 - Mock `browser.cookies` in Vitest with `vi.fn()` — test all CRUD operations
 - Test decoder with real-world cookie values: GA cookies, JWT tokens, base64 session IDs, URL-encoded payloads
 - Test export format output byte-for-byte against known-good fixtures
 - Test import with malformed input: truncated JSON, corrupted cookies.txt, empty clipboard
+- Test import key normalization: PascalCase (ZennoPoster), UPPER_CASE, object wrappers, ISO date strings
 
 ## Browser Testing with Claude in Chrome
 
