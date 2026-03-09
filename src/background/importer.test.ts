@@ -74,6 +74,68 @@ describe('importCookies', () => {
       await importCookies(input, 'json', 'https://example.com/');
       expect(browser.cookies.set).toHaveBeenCalledWith(expect.objectContaining({ sameSite: 'no_restriction' }));
     });
+
+    it('imports ZennoPoster PascalCase JSON format', async () => {
+      const input = JSON.stringify([
+        {
+          Name: 'zp_session',
+          Value: 'abc123',
+          Domain: '.example.com',
+          Path: '/',
+          Secure: false,
+          HttpOnly: true,
+          Expires: '2027-01-15T10:30:00.0000000+00:00',
+        },
+        {
+          Name: 'zp_token',
+          Value: 'xyz789',
+          Domain: '.example.com',
+          Path: '/app',
+          Secure: true,
+          HttpOnly: false,
+        },
+      ]);
+      const { browser } = await import('wxt/browser');
+      const result = await importCookies(input, 'json', 'https://example.com/');
+      expect(result.imported).toBe(2);
+      expect(result.errors).toHaveLength(0);
+      expect(browser.cookies.set).toHaveBeenCalledWith(
+        expect.objectContaining({
+          name: 'zp_session',
+          value: 'abc123',
+          domain: '.example.com',
+          httpOnly: true,
+          expirationDate: Math.floor(Date.parse('2027-01-15T10:30:00.0000000+00:00') / 1000),
+        }),
+      );
+    });
+
+    it('unwraps object wrapper like {"cookies": [...]}', async () => {
+      const input = JSON.stringify({
+        cookies: [{ name: 'wrapped', domain: '.example.com', value: 'ok' }],
+      });
+      const result = await importCookies(input, 'json', 'https://example.com/');
+      expect(result.imported).toBe(1);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    it('handles expiry as ISO date string', async () => {
+      const { browser } = await import('wxt/browser');
+      const input = JSON.stringify([{ name: 'test', domain: '.example.com', expires: '2026-06-01T00:00:00Z' }]);
+      await importCookies(input, 'json', 'https://example.com/');
+      expect(browser.cookies.set).toHaveBeenCalledWith(
+        expect.objectContaining({
+          expirationDate: Math.floor(Date.parse('2026-06-01T00:00:00Z') / 1000),
+        }),
+      );
+    });
+
+    it('handles mixed-case keys like "DOMAIN", "NAME"', async () => {
+      const input = JSON.stringify([{ NAME: 'upper', DOMAIN: '.example.com', VALUE: 'test', SECURE: true }]);
+      const result = await importCookies(input, 'json', 'https://example.com/');
+      expect(result.imported).toBe(1);
+      expect(result.errors).toHaveLength(0);
+    });
   });
 
   describe('Netscape format', () => {
