@@ -80,30 +80,26 @@ Detection priority: JWT → Base64 → URL-encoded → raw text.
 
 ## Import Logic (src/background/importer.ts)
 
-Two import formats: JSON and Netscape cookies.txt. Both return `{ imported, errors }`.
+`importCookies(input, format)` → `{ imported, errors, importedKeys, importedCookies }`.
 
-### JSON import — key normalization (v1.3.2)
+Two formats: JSON and Netscape cookies.txt. No URL parameter — each cookie builds its own URL via `buildCookieUrl(domain, path, secure)`. This ensures multi-domain imports (e.g. full ZennoPoster profile exports) work from any tab, including `about:blank`.
 
-All JSON field names are matched **case-insensitively** via `normalizeKeys()`. This ensures compatibility with:
-- **Browser-native** format: `name`, `value`, `domain`, `path`, `expirationDate`, `secure`, `httpOnly`, `sameSite`
-- **ZennoPoster / .NET** format: `Name`, `Value`, `Domain`, `Path`, `Expires`, `Secure`, `HttpOnly`
-- **Any mixed casing**: `NAME`, `DOMAIN`, etc.
+### JSON import
 
-Expiry field aliases: `expirationDate`, `expiry`, `expires` — all recognized. Values can be Unix timestamps (number) or ISO 8601 date strings (parsed via `Date.parse()`).
-
-### Per-cookie URL building (v1.3.3)
-
-Each cookie's URL is built from its own `domain`/`path`/`secure` via `buildCookieUrl()`. The tab URL passed from the popup is **not** used — this ensures multi-domain imports (e.g. full ZennoPoster profile exports) work correctly. Previously, using the tab URL for all cookies caused `browser.cookies.set()` to fail when the cookie domain didn't match the tab's domain.
-
-### sameSite value normalization (v1.3.3)
-
-`validateSameSite()` is **case-insensitive**: `"Unspecified"`, `"STRICT"`, `"Lax"`, `"None"` all map correctly to the browser API values (`unspecified`, `strict`, `lax`, `no_restriction`). ZennoPoster exports PascalCase sameSite values.
-
-Object wrappers like `{"cookies": [...]}` are auto-unwrapped (first array-typed value is used).
+1. **Key normalization** — `normalizeKeys()` matches all field names **case-insensitively**: `name`/`Name`/`NAME` all work. Supports browser-native (`expirationDate`), ZennoPoster/.NET (`Expires`), and mixed formats
+2. **sameSite normalization** — `validateSameSite()` is **case-insensitive**: `"Unspecified"`, `"Strict"`, `"Lax"` → lowercase browser values; `"None"`/`"none"` → `"no_restriction"`. Unknown values default to `"lax"`
+3. **Expiry aliases** — `expirationDate`, `expiry`, `expires` all recognized. Values: Unix timestamps (number) or ISO 8601 date strings (`Date.parse()`). Zero/null → session cookie (undefined)
+4. **Object unwrapping** — `{"cookies": [...]}` auto-unwrapped (first array-typed value)
+5. **Extra fields ignored** — `hostOnly`, `session`, `id`, `storeId: null` from ZennoPoster pass through harmlessly
 
 ### Netscape import
 
 Standard `domain\tflag\tpath\tsecure\texpiry\tname\tvalue` tab-separated format. Comment lines (`#`) and empty lines are skipped. Values containing tabs are preserved.
+
+### Return value
+
+- `importedKeys: string[]` — `"name|domain|path"` keys for highlight matching (same format as `cookieKey()` in `table.ts`)
+- `importedCookies: CookieRecord[]` — full records for immediate display in popup (merged into table even if current tab doesn't match)
 
 ## Testing Strategy
 
@@ -112,6 +108,9 @@ Standard `domain\tflag\tpath\tsecure\texpiry\tname\tvalue` tab-separated format.
 - Test export format output byte-for-byte against known-good fixtures
 - Test import with malformed input: truncated JSON, corrupted cookies.txt, empty clipboard
 - Test import key normalization: PascalCase (ZennoPoster), UPPER_CASE, object wrappers, ISO date strings
+- Test multi-domain import: verify `browser.cookies.set()` receives per-cookie URL (not tab URL), test with cookies from 3+ different domains in one import
+- Test sameSite case-insensitive mapping: `"Unspecified"` → `"unspecified"`, `"Strict"` → `"strict"`, `"None"` → `"no_restriction"`
+- Test exact ZennoPoster 7.8.15.0 JSON structure (with `hostOnly`, `session`, `id`, `storeId: null` extra fields)
 
 ## Browser Testing with Claude in Chrome
 
@@ -151,15 +150,21 @@ Pin-to-side-panel lets users keep CookiePeek visible while browsing. The same `p
 - **No background handler needed**: popup calls the APIs directly (Chrome `sidePanel.open` works from extension pages, Firefox `sidebarAction.open` works with user gesture)
 - **Type safety**: both APIs accessed via `(browser as any)` cast — WXT polyfill does not type these Chrome/Firefox-specific APIs. Follow the [fastweb](https://github.com/nicepkg/fastweb) pattern
 
-## Row Flash Highlights (v1.2)
+## Row Flash Highlights (v1.2, extended v1.3.3)
 
-Live cookie changes flash table rows green (added/changed) or red (removed) for 1.5s.
+Table rows flash to indicate cookie changes. Three highlight types:
 
-- **`pendingHighlights`** map in `popup/main.ts` — populated by live listener and manual actions (`onEdit`, `onAddCookie`), consumed by `applyPendingHighlights()` after `renderTable()`
+| Type | Color | Duration | Trigger |
+|------|-------|----------|---------|
+| `added` / `changed` | Green (`--flash-added-bg`) | 1.5s (`ROW_FLASH_MS`) | Live `onChanged`, edit, add |
+| `removed` | Red (`--flash-removed-bg`) | 1.5s (`ROW_FLASH_MS`) | Live `onChanged` delete |
+| `imported` | Blue (`--flash-imported-bg`) | 5s (`IMPORT_FLASH_MS`) | After import |
+
+- **`pendingHighlights`** `Map<string, HighlightType>` in `popup/main.ts` — `HighlightType = CookieChangeType | 'imported'`. Populated by live listener, manual actions, and import. Consumed by `applyPendingHighlights()` after `renderAll()`
 - **`data-cookie-key`** attribute on `<tr>` — set in `table.ts`, queried via `CSS.escape()` for safe selector matching
-- **CSS keyframes** `flash-added` / `flash-removed` — animate from `--flash-added-bg` / `--flash-removed-bg` to transparent
-- **Theme tokens** in `theme.css` — dark theme uses `rgba(success, 0.28)` / `rgba(danger, 0.28)` for visibility; light theme uses `0.15` opacity
-- **`ROW_FLASH_MS = 1500`** constant matches the CSS animation duration; class removed via `setTimeout`
+- **CSS keyframes** `flash-added` / `flash-removed` (instant fade) and `flash-imported` (holds 70% then fades) in `popup.css`
+- **Theme tokens** in `theme.css` — dark uses `0.28` opacity, light uses `0.15`–`0.18` for all three colors
+- **Import highlight flow**: `onImport` → sets highlights → `loadCookiesAfterImport()` → `fetchTabCookies()` (data only, no render) → merge imported cookies → single `applyFilterAndSort()` → `renderAll()` → `applyPendingHighlights()`. The `fetchTabCookies()`/`loadCookies()` split prevents double-render and premature highlight consumption
 
 ## Store Rating Links (v1.2)
 
