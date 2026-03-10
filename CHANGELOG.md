@@ -3,6 +3,17 @@
 All notable changes to CookiePeek are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.3.3] — 2026-03-10
+
+### Fixed
+- **Multi-domain import** — each cookie now gets a URL built from its own `domain`/`path`/`secure`, not the current tab URL. Previously, importing cookies for domains other than the current tab failed silently ([forum report](https://zenno.club/discussion/threads/cookiepeek-besplatnyj-menedzher-kuk-dlja-chrome-export-cookies-txt-json-header-zero-telemetry-open-source.131631/post-873127) by **Shizuku**)
+- **sameSite value normalization** — PascalCase values from ZennoPoster (`"Unspecified"`, `"Strict"`, `"Lax"`, `"None"`) are now mapped correctly. Previously all non-lowercase values silently defaulted to `"lax"`
+- **Firefox import on blank tabs** — removed the `currentTabUrl` requirement that blocked import on `about:blank` / new tabs with "No active tab URL" error
+
+### Added
+- **Import highlight** — imported cookies flash blue for 5 seconds so you can spot them in the table (distinct from green/red live-change flashes)
+- **Show imported cookies immediately** — after import, cookies from other domains are merged into the table even if the current tab doesn't match. Works on blank tabs too
+
 ## [1.3.2] — 2026-03-10
 
 ### Fixed

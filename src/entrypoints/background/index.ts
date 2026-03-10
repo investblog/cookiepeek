@@ -95,7 +95,7 @@ export default defineBackground(() => {
     }
 
     if (type === 'cookiepeek:import-cookies') {
-      importCookies(payload.input, payload.format, payload.url)
+      importCookies(payload.input, payload.format)
         .then((result: { imported: number; errors: string[] }) => sendResponse(result))
         .catch((err: unknown) => sendResponse({ imported: 0, errors: [(err as Error).message] }));
       return true;

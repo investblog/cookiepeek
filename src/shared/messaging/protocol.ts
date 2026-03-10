@@ -26,8 +26,8 @@ export interface MessageMap {
     response: { output: string; error?: string };
   };
   'cookiepeek:import-cookies': {
-    request: { input: string; format: 'json' | 'netscape'; url: string };
-    response: { imported: number; errors: string[] };
+    request: { input: string; format: 'json' | 'netscape' };
+    response: { imported: number; errors: string[]; importedKeys: string[]; importedCookies: CookieRecord[] };
   };
   'cookiepeek:cookie-changed': {
     request: CookieChangeEvent;

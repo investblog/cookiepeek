@@ -126,6 +126,7 @@
 
   --flash-added-bg: rgba(24, 194, 122, 0.28);
   --flash-removed-bg: rgba(255, 79, 110, 0.28);
+  --flash-imported-bg: rgba(59, 130, 246, 0.28);
 
   --notice-success-bg: color-mix(in srgb, var(--ok) 22%, var(--bg-soft));
   --notice-success-fg: color-mix(in srgb, var(--ok) 85%, #ffffff 15%);
@@ -175,6 +176,7 @@
 
   --flash-added-bg: rgba(24, 194, 122, 0.15);
   --flash-removed-bg: rgba(255, 79, 110, 0.15);
+  --flash-imported-bg: rgba(59, 130, 246, 0.18);
 
   --notice-success-bg: color-mix(in srgb, var(--ok) 15%, var(--bg-soft));
   --notice-success-fg: color-mix(in srgb, var(--ok) 70%, #0f1a0f 30%);
@@ -225,6 +227,7 @@
 
     --flash-added-bg: rgba(24, 194, 122, 0.28);
     --flash-removed-bg: rgba(255, 79, 110, 0.28);
+    --flash-imported-bg: rgba(59, 130, 246, 0.28);
 
     --notice-success-bg: color-mix(in srgb, var(--ok) 22%, var(--bg-soft));
     --notice-success-fg: color-mix(in srgb, var(--ok) 85%, #ffffff 15%);
@@ -275,6 +278,7 @@
 
     --flash-added-bg: rgba(24, 194, 122, 0.15);
     --flash-removed-bg: rgba(255, 79, 110, 0.15);
+    --flash-imported-bg: rgba(59, 130, 246, 0.18);
 
     --notice-success-bg: color-mix(in srgb, var(--ok) 15%, var(--bg-soft));
     --notice-success-fg: color-mix(in srgb, var(--ok) 70%, #0f1a0f 30%);

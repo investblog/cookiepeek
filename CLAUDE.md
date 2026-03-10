@@ -91,6 +91,14 @@ All JSON field names are matched **case-insensitively** via `normalizeKeys()`. T
 
 Expiry field aliases: `expirationDate`, `expiry`, `expires` — all recognized. Values can be Unix timestamps (number) or ISO 8601 date strings (parsed via `Date.parse()`).
 
+### Per-cookie URL building (v1.3.3)
+
+Each cookie's URL is built from its own `domain`/`path`/`secure` via `buildCookieUrl()`. The tab URL passed from the popup is **not** used — this ensures multi-domain imports (e.g. full ZennoPoster profile exports) work correctly. Previously, using the tab URL for all cookies caused `browser.cookies.set()` to fail when the cookie domain didn't match the tab's domain.
+
+### sameSite value normalization (v1.3.3)
+
+`validateSameSite()` is **case-insensitive**: `"Unspecified"`, `"STRICT"`, `"Lax"`, `"None"` all map correctly to the browser API values (`unspecified`, `strict`, `lax`, `no_restriction`). ZennoPoster exports PascalCase sameSite values.
+
 Object wrappers like `{"cookies": [...]}` are auto-unwrapped (first array-typed value is used).
 
 ### Netscape import

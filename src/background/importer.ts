@@ -4,23 +4,26 @@ import { buildCookieUrl, setCookie } from './cookies';
 export async function importCookies(
   input: string,
   format: 'json' | 'netscape',
-  url: string,
-): Promise<{ imported: number; errors: string[] }> {
+): Promise<{ imported: number; errors: string[]; importedKeys: string[]; importedCookies: CookieRecord[] }> {
   const parsed = format === 'json' ? parseJson(input) : parseNetscape(input);
   let imported = 0;
   const errors: string[] = [...parsed.parseErrors];
+  const importedKeys: string[] = [];
+  const importedCookies: CookieRecord[] = [];
 
   for (const cookie of parsed.cookies) {
     try {
-      const cookieUrl = url || buildCookieUrl(cookie.domain, cookie.path, cookie.secure);
+      const cookieUrl = buildCookieUrl(cookie.domain, cookie.path, cookie.secure);
       await setCookie(cookie, cookieUrl);
       imported++;
+      importedKeys.push(`${cookie.name}|${cookie.domain}|${cookie.path}`);
+      importedCookies.push(cookie);
     } catch (err) {
       errors.push(`${cookie.name}: ${(err as Error).message}`);
     }
   }
 
-  return { imported, errors };
+  return { imported, errors, importedKeys, importedCookies };
 }
 
 interface ParseResult {
@@ -142,10 +145,12 @@ function parseNetscape(input: string): ParseResult {
 }
 
 function validateSameSite(value: unknown): CookieRecord['sameSite'] {
-  const valid = ['no_restriction', 'lax', 'strict', 'unspecified'];
-  if (typeof value === 'string' && valid.includes(value)) {
-    return value as CookieRecord['sameSite'];
-  }
-  if (value === 'none' || value === 'None') return 'no_restriction';
+  if (typeof value !== 'string') return 'lax';
+  const lower = value.toLowerCase();
+  if (lower === 'no_restriction') return 'no_restriction';
+  if (lower === 'lax') return 'lax';
+  if (lower === 'strict') return 'strict';
+  if (lower === 'unspecified') return 'unspecified';
+  if (lower === 'none') return 'no_restriction';
   return 'lax';
 }

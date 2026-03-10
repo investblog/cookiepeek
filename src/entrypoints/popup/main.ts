@@ -1,4 +1,4 @@
-import { LIVE_UPDATE_DEBOUNCE_MS, ROW_FLASH_MS } from '@shared/constants';
+import { IMPORT_FLASH_MS, LIVE_UPDATE_DEBOUNCE_MS, ROW_FLASH_MS } from '@shared/constants';
 import type { MessageMap } from '@shared/messaging';
 import { sendMessageSafe } from '@shared/messaging';
 import { getStoreInfo } from '@shared/store-links';
@@ -50,9 +50,10 @@ const isSidepanel = new URLSearchParams(window.location.search).has('sidepanel')
 // ---- Live monitoring ----
 let liveDebounceTimer: ReturnType<typeof setTimeout> | null = null;
 let changeLogOpen = false;
-const pendingHighlights = new Map<string, CookieChangeType>();
+type HighlightType = CookieChangeType | 'imported';
+const pendingHighlights = new Map<string, HighlightType>();
 
-function highlightCookie(key: string, type: CookieChangeType): void {
+function highlightCookie(key: string, type: HighlightType): void {
   pendingHighlights.set(key, type);
 }
 
@@ -277,9 +278,14 @@ function applyPendingHighlights(): void {
   for (const [key, type] of pendingHighlights) {
     const row = document.querySelector(`tr[data-cookie-key="${CSS.escape(key)}"]`);
     if (!row) continue;
-    const cls = type === 'removed' ? 'cookie-row--flash-removed' : 'cookie-row--flash-added';
-    row.classList.add(cls);
-    setTimeout(() => row.classList.remove(cls), ROW_FLASH_MS);
+    if (type === 'imported') {
+      row.classList.add('cookie-row--flash-imported');
+      setTimeout(() => row.classList.remove('cookie-row--flash-imported'), IMPORT_FLASH_MS);
+    } else {
+      const cls = type === 'removed' ? 'cookie-row--flash-removed' : 'cookie-row--flash-added';
+      row.classList.add(cls);
+      setTimeout(() => row.classList.remove(cls), ROW_FLASH_MS);
+    }
   }
   pendingHighlights.clear();
 }
@@ -308,7 +314,7 @@ function updateThemeIcon(btn: HTMLElement): void {
 }
 
 // ---- Data loading ----
-async function loadCookies(): Promise<void> {
+async function fetchTabCookies(): Promise<void> {
   try {
     const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
     currentTabId = tab?.id;
@@ -316,7 +322,6 @@ async function loadCookies(): Promise<void> {
 
     if (!currentTabId) {
       allCookies = [];
-      applyFilterAndSort();
       return;
     }
 
@@ -335,7 +340,20 @@ async function loadCookies(): Promise<void> {
     allCookies = [];
     console.error('Failed to load cookies:', err);
   }
+}
 
+async function loadCookies(): Promise<void> {
+  await fetchTabCookies();
+  applyFilterAndSort();
+}
+
+async function loadCookiesAfterImport(importedCookies: CookieRecord[]): Promise<void> {
+  await fetchTabCookies();
+  // Merge imported cookies from other domains not covered by current tab
+  const existing = new Set(allCookies.map(cookieKey));
+  for (const c of importedCookies) {
+    if (!existing.has(cookieKey(c))) allCookies.push(c);
+  }
   applyFilterAndSort();
 }
 
@@ -511,20 +529,19 @@ async function doExport(cookies: CookieRecord[], format: ExportFormat, target: '
 function onImport(): void {
   const modal = showImportDialog(
     async (input, format) => {
-      if (!currentTabUrl) {
-        showToast('No active tab URL', 'error');
-        return;
-      }
       const response = await sendMessageSafe<MessageMap['cookiepeek:import-cookies']['response']>({
         type: 'cookiepeek:import-cookies',
-        payload: { input, format, url: currentTabUrl },
+        payload: { input, format },
       });
 
       if (response && !response.__error) {
         const msg = `Imported ${response.imported} cookies`;
         const errCount = response.errors?.length ?? 0;
         showToast(errCount > 0 ? `${msg} (${errCount} errors)` : msg, errCount > 0 ? 'info' : 'success');
-        await loadCookies();
+        for (const key of response.importedKeys ?? []) {
+          highlightCookie(key, 'imported');
+        }
+        await loadCookiesAfterImport(response.importedCookies ?? []);
       } else {
         showToast('Import failed', 'error');
       }

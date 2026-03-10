@@ -1008,6 +1008,16 @@ a.popup__title:hover {
   animation: flash-removed 1.5s ease-out;
 }
 
+@keyframes flash-imported {
+  0%   { background: var(--flash-imported-bg); }
+  70%  { background: var(--flash-imported-bg); }
+  100% { background: transparent; }
+}
+
+.cookie-row--flash-imported td {
+  animation: flash-imported 5s ease-out;
+}
+
 /* ---- Responsive: column priority (container queries) ---- */
 /* Priority levels:
  * - critical: Always visible (checkbox, name, value, actions)
