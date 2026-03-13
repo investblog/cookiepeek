@@ -3,6 +3,17 @@
 All notable changes to CookiePeek are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.4.0] — 2026-03-13
+
+### Added
+- **Inline import error display** — import errors now show directly in the drawer with success/error banners instead of being silently discarded in a toast
+- **Import retry** — on partial failure, drawer stays open with "Re-import" button; edit the input and try again without re-opening
+- **Enriched error messages** — cookie set errors now include domain (`session_id (.example.com): Invalid domain`), Netscape parse errors include line preview
+
+### Changed
+- Import drawer auto-closes only on full success (zero errors); partial success keeps drawer open with results
+- Controls disabled during import with "Importing..." feedback
+
 ## [1.3.3] — 2026-03-10
 
 ### Fixed

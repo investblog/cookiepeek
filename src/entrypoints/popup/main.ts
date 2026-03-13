@@ -17,7 +17,7 @@ import { appendChangeLogEntry, createChangeLogPanel } from './components/change-
 import { showCookieModal } from './components/cookie-modal';
 import { createDecodedPanel, updateDecodedPanel } from './components/decoded-view';
 import { detectExportFilename, detectExportMime } from './components/export-menu';
-import { showImportDialog } from './components/import-dialog';
+import { type ImportResult, showImportDialog } from './components/import-dialog';
 import { createSearch, filterCookies } from './components/search';
 import { cookieKey, createTable, sortCookies } from './components/table';
 import { createBulkBar, createToolbar } from './components/toolbar';
@@ -528,23 +528,31 @@ async function doExport(cookies: CookieRecord[], format: ExportFormat, target: '
 
 function onImport(): void {
   const modal = showImportDialog(
-    async (input, format) => {
+    async (input, format): Promise<ImportResult> => {
       const response = await sendMessageSafe<MessageMap['cookiepeek:import-cookies']['response']>({
         type: 'cookiepeek:import-cookies',
         payload: { input, format },
       });
 
       if (response && !response.__error) {
-        const msg = `Imported ${response.imported} cookies`;
-        const errCount = response.errors?.length ?? 0;
-        showToast(errCount > 0 ? `${msg} (${errCount} errors)` : msg, errCount > 0 ? 'info' : 'success');
-        for (const key of response.importedKeys ?? []) {
-          highlightCookie(key, 'imported');
+        const errors = response.errors ?? [];
+
+        // Highlight and reload for any successful imports (even partial)
+        if (response.imported > 0) {
+          for (const key of response.importedKeys ?? []) {
+            highlightCookie(key, 'imported');
+          }
+          await loadCookiesAfterImport(response.importedCookies ?? []);
         }
-        await loadCookiesAfterImport(response.importedCookies ?? []);
-      } else {
-        showToast('Import failed', 'error');
+
+        // Toast only on full success (dialog auto-closes that path)
+        if (errors.length === 0) {
+          showToast(`Imported ${response.imported} cookies`, 'success');
+        }
+
+        return { imported: response.imported, errors };
       }
+      return { imported: 0, errors: ['Import failed: no response from background'] };
     },
     () => updatePopupHeight(),
   );

@@ -1,7 +1,12 @@
 import { el, ICONS, readFileAsText, svgIcon } from '../helpers';
 
+export interface ImportResult {
+  imported: number;
+  errors: string[];
+}
+
 export function showImportDialog(
-  onImport: (input: string, format: 'json' | 'netscape') => void,
+  onImport: (input: string, format: 'json' | 'netscape') => Promise<ImportResult>,
   onCancel: () => void,
 ): HTMLElement {
   const drawer = document.createElement('aside');
@@ -85,22 +90,58 @@ export function showImportDialog(
   fileWrap.appendChild(fileName);
   body.appendChild(fileWrap);
 
+  // Results section (hidden initially)
+  const resultsSection = el('div', 'import-results');
+  resultsSection.style.display = 'none';
+  body.appendChild(resultsSection);
+
   panel.appendChild(body);
 
   // Footer
   const footer = el('div', 'drawer__footer');
   const cancelBtn = el('button', 'btn btn--secondary', 'Cancel');
   cancelBtn.addEventListener('click', close);
-  const importBtn = el('button', 'btn btn--primary', 'Import');
-  importBtn.addEventListener('click', () => {
+  const importBtn = el('button', 'btn btn--primary', 'Import') as HTMLButtonElement;
+
+  importBtn.addEventListener('click', async () => {
     const input = textarea.value.trim();
     if (!input) return;
-    drawer.remove();
-    onImport(input, currentFormat);
+
+    // Disable controls during import
+    importBtn.disabled = true;
+    importBtn.textContent = 'Importing...';
+    textarea.disabled = true;
+    cancelBtn.disabled = true;
+
+    const result = await onImport(input, currentFormat);
+
+    // Re-enable controls
+    textarea.disabled = false;
+    cancelBtn.disabled = false;
+
+    if (result.errors.length === 0) {
+      // All succeeded — auto-close
+      drawer.remove();
+    } else {
+      // Show errors inline, let user retry
+      importBtn.disabled = false;
+      importBtn.textContent = 'Re-import';
+      renderResults(resultsSection, result);
+    }
   });
+
   footer.appendChild(cancelBtn);
   footer.appendChild(importBtn);
   panel.appendChild(footer);
+
+  // Clear results when user edits textarea
+  textarea.addEventListener('input', () => {
+    resultsSection.style.display = 'none';
+    resultsSection.innerHTML = '';
+    if (importBtn.textContent === 'Re-import') {
+      importBtn.textContent = 'Import';
+    }
+  });
 
   // Assemble
   drawer.appendChild(overlay);
@@ -115,4 +156,33 @@ export function showImportDialog(
   }
 
   return drawer;
+}
+
+function renderResults(container: HTMLElement, result: ImportResult): void {
+  container.innerHTML = '';
+  container.style.display = '';
+
+  if (result.imported > 0) {
+    const success = el(
+      'div',
+      'import-results__success',
+      `Successfully imported ${result.imported} cookie${result.imported !== 1 ? 's' : ''}`,
+    );
+    container.appendChild(success);
+  }
+
+  if (result.errors.length > 0) {
+    const errorHeader = el(
+      'div',
+      'import-results__error-header',
+      `${result.errors.length} error${result.errors.length !== 1 ? 's' : ''}:`,
+    );
+    container.appendChild(errorHeader);
+
+    const list = el('div', 'import-results__list');
+    for (const err of result.errors) {
+      list.appendChild(el('div', 'import-results__item', err));
+    }
+    container.appendChild(list);
+  }
 }

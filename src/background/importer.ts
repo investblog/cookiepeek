@@ -19,7 +19,8 @@ export async function importCookies(
       importedKeys.push(`${cookie.name}|${cookie.domain}|${cookie.path}`);
       importedCookies.push(cookie);
     } catch (err) {
-      errors.push(`${cookie.name}: ${(err as Error).message}`);
+      const domain = cookie.domain ? ` (${cookie.domain})` : '';
+      errors.push(`${cookie.name}${domain}: ${(err as Error).message}`);
     }
   }
 
@@ -124,7 +125,8 @@ function parseNetscape(input: string): ParseResult {
 
     const parts = line.split('\t');
     if (parts.length < 7) {
-      parseErrors.push(`Line ${i + 1}: expected 7 tab-separated fields, got ${parts.length}`);
+      const preview = line.length > 60 ? `${line.slice(0, 60)}...` : line;
+      parseErrors.push(`Line ${i + 1}: expected 7 fields, got ${parts.length} \u2014 "${preview}"`);
       continue;
     }
 
