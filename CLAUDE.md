@@ -96,10 +96,43 @@ Two formats: JSON and Netscape cookies.txt. No URL parameter — each cookie bui
 
 Standard `domain\tflag\tpath\tsecure\texpiry\tname\tvalue` tab-separated format. Comment lines (`#`) and empty lines are skipped. Values containing tabs are preserved.
 
+### Error messages (v1.4)
+
+- **Cookie set errors** include domain: `"session_id (.example.com): Invalid domain"`
+- **Netscape parse errors** include line preview (truncated at 60 chars): `"Line 5: expected 7 fields, got 3 — "some.domain  FALSE  /  FA...""`
+
 ### Return value
 
 - `importedKeys: string[]` — `"name|domain|path"` keys for highlight matching (same format as `cookieKey()` in `table.ts`)
 - `importedCookies: CookieRecord[]` — full records for immediate display in popup (merged into table even if current tab doesn't match)
+
+## Import Error Display (v1.4)
+
+Import drawer shows inline results instead of a toast. Located in `src/entrypoints/popup/components/import-dialog.ts`.
+
+### `ImportResult` type
+
+```typescript
+export interface ImportResult { imported: number; errors: string[] }
+```
+
+`onImport` callback returns `Promise<ImportResult>`. The dialog controls the close behavior based on error count.
+
+### Behavior
+
+- **Zero errors** → drawer auto-closes, success toast shown
+- **Has errors** → drawer stays open, results rendered inline, button becomes "Re-import"
+- **During import** → all controls disabled, button text "Importing..."
+- **Textarea edit after errors** → results cleared, button reverts to "Import"
+- **Partial success** → green success banner + red scrollable error list shown together; highlights and cookie reload still fire for successful imports
+
+### CSS classes (in `popup.css`)
+
+- `.import-results` — container
+- `.import-results__success` — green banner (`--notice-success-bg/fg`)
+- `.import-results__error-header` — red header (`--notice-error-bg/fg`)
+- `.import-results__list` — scrollable error list (`max-height: 140px`)
+- `.import-results__item` — monospace error line
 
 ## Testing Strategy
 
