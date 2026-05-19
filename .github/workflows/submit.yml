@@ -1,0 +1,44 @@
+name: Submit to stores
+
+# Thin caller of the shared reusable workflow in investblog/geo-tier-builder.
+# Chrome auto-submits on a v* tag; Firefox is manual-only (the reusable
+# workflow centrally gates Firefox to workflow_dispatch — AMO burns
+# version numbers). Edge is disabled until an EDGE_PRODUCT_ID secret is
+# added (Partner Center). Secrets are this repo's GitHub Actions secrets.
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to submit (e.g. v1.0.0)'
+        required: true
+      stores:
+        description: 'Which store(s) to submit'
+        type: choice
+        options:
+          - chrome
+          - firefox
+          - all
+        default: chrome
+      dry_run:
+        description: 'Dry run (validate credentials only, publish nothing)'
+        type: boolean
+        default: true
+
+concurrency:
+  group: submit-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  submit:
+    uses: investblog/geo-tier-builder/.github/workflows/store-submit.yml@main
+    secrets: inherit
+    with:
+      ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+      dry_run: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
+      chrome: ${{ github.event_name == 'push' || inputs.stores == 'chrome' || inputs.stores == 'all' }}
+      firefox: ${{ inputs.stores == 'firefox' || inputs.stores == 'all' }}
+      edge: false
