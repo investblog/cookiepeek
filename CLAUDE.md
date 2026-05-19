@@ -260,3 +260,28 @@ Version must be updated in **three** places:
 - Tags: `vX.Y.Z` triggers GitHub Actions release with .zip artifacts
 - Never commit `.output/`, `node_modules/`, `.env`
 - **CHANGELOG.md** — Keep a Changelog format, update on each release
+
+## Releasing / store deploy
+
+Version lives **only** in `wxt.config.ts` (`manifest.version`); `package.json` is not
+used by the build. To release: bump it, then `git tag vX.Y.Z && git push origin vX.Y.Z`.
+
+A `v*` tag drives two workflows:
+- `release.yml` — typecheck/lint/test + a GitHub release with the built ZIPs.
+- `submit.yml` — a thin caller of the **shared reusable workflow**
+  `investblog/geo-tier-builder/.github/workflows/store-submit.yml@main`.
+
+**Chrome + Edge auto-submit on the tag; Firefox is manual** (Actions → *Submit to
+stores* → `stores=firefox`; AMO burns version numbers forever, so it never
+auto-runs). The manual dispatch has a `dry_run` toggle that validates
+credentials without publishing.
+
+Store credentials are this repo's **GitHub Actions secrets** (`CHROME_*`,
+`FIREFOX_*`, `EDGE_*`). API creds are account-level and shared across all
+investblog extensions; only the per-extension IDs (`CHROME_EXTENSION_ID`,
+`FIREFOX_EXTENSION_ID`, `EDGE_PRODUCT_ID`) differ.
+
+**Before changing the release/CI flow:** confirm the reusable-workflow ref still
+resolves and the secrets exist (`gh secret list`). Store publishing here depends
+on the external `investblog/geo-tier-builder` workflow — it is a cross-repo
+contract, not visible from this repo's code alone.
